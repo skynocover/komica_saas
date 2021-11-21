@@ -507,7 +507,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
         </div>
 
         {headLinks.map((item, index) => (
-          <div className="col-span-2 flex items-center mb-1">
+          <div key={index} className="col-span-2 flex items-center mb-1">
             <TextField
               className="w-1/4"
               name={`${item}_${index}_name`}
@@ -548,7 +548,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
         </div>
 
         {forbidContents.map((item, index) => (
-          <div className="col-span-2 flex items-center mb-1">
+          <div key={index} className="col-span-2 flex items-center mb-1">
             <TextField
               className="flex-1"
               name={`${item}_${index}_name`}
