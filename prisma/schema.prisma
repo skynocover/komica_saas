@@ -1,0 +1,153 @@
+datasource db {
+    provider = "mongodb"
+    url      = env("DATABASE_URL")
+}
+
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["mongoDb"]
+}
+
+model User {
+    id      String @id @default(dbgenerated()) @map("_id") @db.ObjectId
+    account String @unique
+
+    createdAt     DateTime        @default(now())
+    Service       Service[]
+    ServiceMember ServiceMember[]
+    Thread        Thread[]
+    Reply         Reply[]
+    Report        Report[]
+}
+
+model Service {
+    id             String   @id @default(dbgenerated()) @map("_id") @db.ObjectId
+    name           String
+    topLink        Json
+    headLink       Json
+    description    String
+    forbidContents String[]
+    limitPostCount Int      @default(3)
+    limitPostMin   Int      @default(5)
+    auth           Json
+
+    createdAt DateTime  @default(now())
+    deletedAt DateTime?
+
+    ownerId           String              @db.ObjectId
+    Owner             User                @relation(fields: [ownerId], references: [id])
+    Thread            Thread[]
+    Log               Log[]
+    Report            Report[]
+    ServiceMember     ServiceMember[]
+    ServiceInviteLink ServiceInviteLink[]
+}
+
+model ServiceInviteLink {
+    id        String    @id @default(dbgenerated()) @map("_id") @db.ObjectId
+    serviceId String    @db.ObjectId
+    Service   Service   @relation(fields: [serviceId], references: [id])
+    createdAt DateTime  @default(now())
+    expiredAt DateTime?
+}
+
+model ServiceMember {
+    id          String   @id @default(dbgenerated()) @map("_id") @db.ObjectId
+    userId      String   @db.ObjectId
+    User        User     @relation(fields: [userId], references: [id])
+    serviceId   String   @db.ObjectId
+    Service     Service  @relation(fields: [serviceId], references: [id])
+    createdAt   DateTime @default(now())
+    displayName String
+
+    Thread Thread[]
+    @@unique([userId, serviceId])
+    Reply Reply[]
+}
+
+model Thread {
+    id        String    @id @default(dbgenerated()) @map("_id") @db.ObjectId
+    userId    String
+    title     String?
+    name      String
+    content   String?
+    image     String?
+    youtubeID String?
+    createdAt DateTime  @default(now())
+    replyAt   DateTime  @default(now())
+    deletedAt DateTime?
+
+    posterId String? @db.ObjectId
+    Poster   User?   @relation(fields: [posterId], references: [id])
+
+    memberId String?        @db.ObjectId
+    Member   ServiceMember? @relation(fields: [memberId], references: [id])
+
+    serviceId String   @db.ObjectId
+    Service   Service  @relation(fields: [serviceId], references: [id])
+    Reply     Reply[]
+    Report    Report[]
+}
+
+model Reply {
+    id        String    @id @default(dbgenerated()) @map("_id") @db.ObjectId
+    userId    String
+    name      String?
+    content   String?
+    image     String
+    youtubeID String?
+    sage      Boolean   @default(false)
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    posterId String? @db.ObjectId
+    Poster   User?   @relation(fields: [posterId], references: [id])
+
+    memberId String?        @db.ObjectId
+    Member   ServiceMember? @relation(fields: [memberId], references: [id])
+
+    threadId String   @db.ObjectId
+    Thread   Thread   @relation(fields: [threadId], references: [id])
+    Report   Report[]
+}
+
+model Report {
+    id        String       @id @default(dbgenerated()) @map("_id") @db.ObjectId
+    reason    ReportReason
+    content   String
+    createdAt DateTime     @default(now())
+
+    posterId String? @db.ObjectId
+    Poster   User?   @relation(fields: [posterId], references: [id])
+
+    serviceId String  @db.ObjectId
+    Service   Service @relation(fields: [serviceId], references: [id])
+
+    threadId String? @db.ObjectId
+    Thread   Thread? @relation(fields: [threadId], references: [id])
+
+    replyId String? @db.ObjectId
+    Reply   Reply?  @relation(fields: [replyId], references: [id])
+}
+
+enum ReportReason {
+    del
+    war
+}
+
+model Log {
+    id        String   @id @default(dbgenerated()) @map("_id") @db.ObjectId
+    ip        String
+    createdAt DateTime @default(now())
+    action    Action
+
+    serviceId String  @db.ObjectId
+    Service   Service @relation(fields: [serviceId], references: [id])
+}
+
+enum Action {
+    thread
+    reply
+    report
+}
