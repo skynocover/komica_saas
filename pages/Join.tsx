@@ -130,7 +130,6 @@ export default function Index() {
       <antd.Table
         dataSource={dataSource}
         columns={columns}
-        // pagination={false}
         pagination={{
           current: currentPage,
           pageSize: pageSize,
@@ -141,5 +140,5 @@ export default function Index() {
     </antd.Spin>
   );
 
-  return <MainPage title={'Home'} content={content} />;
+  return <MainPage title="Join" content={content} />;
 }

@@ -183,7 +183,7 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
     </antd.Spin>
   );
 
-  return <MainPage title={'Home'} content={content} />;
+  return <MainPage title="Report" content={content} />;
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res, query }) => {

@@ -18,6 +18,7 @@ interface MainPageProps {
 const MainPage = ({ title, content }: MainPageProps) => {
   const router = useRouter();
   const appCtx = React.useContext(AppContext);
+  const [collapsed, setCollapsed] = React.useState<boolean>(true);
 
   const menus = [
     {
@@ -80,15 +81,18 @@ const MainPage = ({ title, content }: MainPageProps) => {
 
   const renderMenu = () => {
     return (
-      <antd.Layout.Sider collapsible trigger={null} className="overflow-auto">
+      <antd.Layout.Sider
+        collapsible
+        collapsed={collapsed}
+        onCollapse={setCollapsed}
+        className="overflow-auto"
+      >
         <antd.Menu
           theme="dark"
           mode="inline"
           selectedKeys={[router.route]}
           defaultOpenKeys={[router.route]}
-          onClick={({ item, key }) => {
-            router.push(key);
-          }}
+          onClick={({ item, key }) => router.push(key)}
         >
           {menus.map((menu) => {
             return (

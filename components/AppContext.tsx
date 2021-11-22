@@ -171,8 +171,6 @@ const AppProvider = ({ children }: AppProviderProps) => {
   const logout = async () => {
     auth.signOut();
     axios.delete('/api/account', {});
-    // setUser(null);
-    console.log('logout');
   };
 
   //////// login
