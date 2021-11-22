@@ -106,9 +106,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
   const [successLabel, setSuccessLabel] = React.useState('success');
   const [severity, setSeverity] = React.useState<any>('success');
   const SuccessClose = (_event: any, reason: any) => {
-    if (reason === 'clickaway') {
-      return;
-    }
+    if (reason === 'clickaway') return;
     setBarOpen(false);
   };
 
@@ -171,6 +169,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
   const logout = async () => {
     auth.signOut();
     axios.delete('/api/account', {});
+    router.push('/');
   };
 
   //////// login

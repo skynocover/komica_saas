@@ -50,14 +50,7 @@ const MainPage = ({ title, content }: MainPageProps) => {
           placement="bottom"
           content={
             <div className="flex">
-              <antd.Button
-                type="link"
-                danger
-                onClick={() => {
-                  appCtx.logout();
-                  router.push('/');
-                }}
-              >
+              <antd.Button type="link" danger onClick={() => appCtx.logout()}>
                 Log Out
               </antd.Button>
             </div>

@@ -86,7 +86,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
     visible: service ? service.auth.visible : 'allowAnonymous',
     thread: service ? service.auth.thread : 'anonymous',
     reply: service ? service.auth.reply : 'anonymous',
-    report: service ? service.auth.report : 'anonymous',
+    report: service ? service.auth.report : 'allowAnonymous',
   });
 
   const addTopLink = (i: number) => {
@@ -220,7 +220,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
           visible: 'allowAnonymous',
           thread: 'anonymous',
           reply: 'anonymous',
-          report: 'anonymous',
+          report: 'allowAnonymous',
         });
         break;
       case 2:

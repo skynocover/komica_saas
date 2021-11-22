@@ -42,11 +42,15 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
     init();
   }, [authUser]);
 
+  const login = async (account: string, password: string) => {
+    await signInWithEmailAndPassword(auth, account, password);
+  };
+
   const LoginForm = () => {
     return (
       <antd.Form
         initialValues={{ account: 'user@gmail.com', password: '123456' }}
-        onFinish={(values) => signInWithEmailAndPassword(auth, values.account, values.password)}
+        onFinish={(values) => login(values.account, values.password)}
       >
         <antd.Form.Item
           name="account"
