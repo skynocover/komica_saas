@@ -61,8 +61,8 @@ model ServiceMember {
     displayName String
 
     Thread Thread[]
+    Reply  Reply[]
     @@unique([userId, serviceId])
-    Reply Reply[]
 }
 
 model Thread {

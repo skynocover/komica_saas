@@ -63,7 +63,7 @@ export const InviteLinkList = ({ serviceId }: { serviceId: string }) => {
       align: 'center',
       render: (item) => (
         <antd.Typography.Paragraph copyable>
-          {`${process.env.NEXT_PUBLIC_DOMAIN}/invite/${item.id}`}
+          {`${router.basePath}/invite/${item.id}`}
         </antd.Typography.Paragraph>
       ),
     },

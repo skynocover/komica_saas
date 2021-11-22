@@ -30,6 +30,11 @@ const MainPage = ({ title, content }: MainPageProps) => {
       title: '版面回報',
       icon: 'fa fa-user-secret',
     },
+    {
+      key: '/Join',
+      title: '已加入的版面',
+      icon: 'fa fa-sign-in',
+    },
   ];
 
   const renderHeader = () => {

@@ -1,8 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { Prisma } from '.prisma/client';
 
 import { prisma } from '../../../database/db';
 import { Resp, Tresp } from '../../../resp/resp';
 import { firebaseAuth } from '../../../firebase/auth';
+import { checkUserAndGroup, checkAuth } from '../../../utils/checkServiceAuth';
 
 const limitdefault = 10;
 
@@ -11,8 +13,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       const decodeToken = await firebaseAuth(req);
 
-      let offset = req.query.offset ? +req.query.offset : undefined;
-      let limit = req.query.limit ? +req.query.limit : undefined;
+      const offset = req.query.offset ? +req.query.offset : undefined;
+      const limit = req.query.limit ? +req.query.limit : undefined;
 
       const reports = await prisma.report.findMany({
         where: {
@@ -49,38 +51,58 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
   async function postReport() {
     try {
-      const { postId, reason, content } = req.body;
+      const { postId, reason, content, serviceId } = req.body;
 
-      const thread = await prisma.thread.findUnique({ where: { id: postId } });
-      const reply = await prisma.reply.findUnique({
-        where: { id: postId },
-        include: { Thread: true },
+      const service = await prisma.service.findFirst({
+        where: { id: serviceId, deletedAt: null },
+        include: { Owner: { select: { account: true } } },
+      });
+      if (!service) {
+        res.json(Resp.queryNotFound);
+        return;
+      }
+
+      let uid = '';
+      try {
+        uid = (await firebaseAuth(req)).uid;
+      } catch (error) {}
+
+      // 確認用戶service權限
+      const { user, member } = await checkUserAndGroup(serviceId, uid);
+
+      const checkauth = await checkAuth(service, uid, user, member);
+      if (!checkauth.report) {
+        res.json(Resp.userPermissionDenied);
+        return;
+      }
+
+      const thread = await prisma.thread.findFirst({
+        where: { id: postId, deletedAt: null, serviceId: service.id },
+      });
+      const reply = await prisma.reply.findFirst({
+        where: { id: postId, deletedAt: null, Thread: { serviceId: service.id } },
+        include: { Thread: { select: { serviceId: true } } },
       });
 
+      //必須要是thread或是reply
       if (!(thread || reply)) {
         res.json(Resp.queryNotFound);
         return;
       }
 
+      let data: Prisma.ReportCreateInput = {
+        reason,
+        content,
+        Service: { connect: { id: service.id } },
+      };
+      if (user) data.Poster = { connect: { id: user.id } };
+
       if (thread) {
-        await prisma.report.create({
-          data: {
-            reason,
-            content,
-            Thread: { connect: { id: postId } },
-            Service: { connect: { id: thread.serviceId } },
-          },
-        });
+        data.Thread = { connect: { id: postId } };
       } else if (reply) {
-        await prisma.report.create({
-          data: {
-            reason,
-            content,
-            Reply: { connect: { id: postId } },
-            Service: { connect: { id: reply.Thread.serviceId } },
-          },
-        });
+        data.Reply = { connect: { id: postId } };
       }
+      await prisma.report.create({ data });
 
       res.json(Resp.success);
     } catch (error: any) {

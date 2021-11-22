@@ -29,29 +29,7 @@ dayjs.extend(utc);
 
 const pageSize = 10;
 
-interface report {
-  reason: string;
-  content: string;
-  createdAt: string;
-  thread?: thread;
-  reply?: reply;
-}
-
-interface thread {
-  id: string;
-  service: service;
-}
-
-interface service {
-  name: string;
-}
-
-interface reply {
-  id: string;
-  thread: thread;
-}
-
-export default function Index({}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Index() {
   const appCtx = React.useContext(AppContext);
   const router = useRouter();
 
@@ -59,6 +37,7 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
   const [count, setCount] = React.useState<number>(0);
   const [currentPage, setCurrentPage] = React.useState<number>(1);
   const [spin, setSpin] = React.useState<boolean>(true);
+  const [serviceName, setServiceName] = React.useState<string>('');
 
   const pageCount = Math.ceil(count / pageSize);
 
@@ -66,118 +45,97 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
 
   React.useEffect(() => {
     if (authUser) {
-      getReport();
+      getGroup();
     } else if (!authUser) {
       router.push('/');
     }
-  }, [authUser]);
+  }, [authUser, serviceName]);
 
-  const getReport = async (page: number = currentPage) => {
+  const getGroup = async (page: number = currentPage) => {
     setCurrentPage(page);
     let url = new URLSearchParams();
     url.append('offset', (pageSize * (page - 1)).toString());
     url.append('limit', pageSize.toString());
+    url.append('serviceName', serviceName);
     setSpin(true);
-    const data = await appCtx.fetch('get', '/api/post/report?' + url.toString());
+    const data = await appCtx.fetch('get', '/api/service/group?' + url.toString());
     if (data) {
-      setDataSource(data.reports);
+      setDataSource(data.services);
       setCount(data.count);
     }
     setSpin(false);
   };
 
-  const delReport = async (id: string, serviceId: string) => {
-    await appCtx.fetch('delete', '/api/post/report', { id, serviceId });
-    getReport();
+  const leaveGroup = async (id: string) => {
+    const data = await appCtx.fetch('delete', '/api/service/group', { id });
+    if (data) getGroup();
   };
 
-  const delThread = async (id: string, serviceId: string, reportId: string) => {
-    await appCtx.fetch('delete', '/api/post/thread', { id, serviceId, reportId });
-    getReport();
-  };
-
-  const delReply = async (id: string, serviceId: string, reportId: string) => {
-    await appCtx.fetch('delete', '/api/post/reply', { id, serviceId, reportId });
-    getReport();
-  };
-
-  const getLink = (item: any) => {
-    return (
-      `/service/${item.Service.id}/` +
-      (item.Thread ? item.Thread.id : `${item.Reply.Thread.id}#${item.Reply.id}`)
-    );
-  };
-
-  const columns: ColumnsType<report> = [
+  const columns: ColumnsType<any> = [
     {
       title: 'Service',
       align: 'center',
       render: (item) => <>{item.Service.name}</>,
     },
     {
-      title: '回報原因',
+      title: '顯示名稱',
       align: 'center',
-      render: (item) =>
-        item.reason === 'del' ? (
-          <antd.Tag color="cyan">刪文請求</antd.Tag>
-        ) : (
-          <antd.Tag color="magenta">引戰</antd.Tag>
-        ),
+      dataIndex: 'displayName',
     },
     {
-      title: '回報內容',
-      align: 'center',
-      dataIndex: 'content',
-    },
-    {
-      title: '回報時間',
+      title: '加入時間',
       align: 'center',
       render: (item) => <>{dayjs(item.createdAt).format('YYYY-MM-DDTHH:mm')}</>,
     },
     {
       align: 'center',
       render: (item) => (
-        <antd.Button type="primary" href={router.basePath + getLink(item)} target="_blank">
-          前往此文
+        <antd.Button
+          type="primary"
+          href={`${router.basePath}/service/${item.Service.id}`}
+          target="_blank"
+        >
+          前往版面
         </antd.Button>
       ),
     },
     {
       align: 'center',
-      render: (item) => (
-        <DangerButton
-          title={item.Thread ? '刪除討論串' : '刪除回覆'}
-          message={'確認刪除?'}
-          onClick={() =>
-            item.Thread
-              ? delThread(item.Thread.id, item.Service.id, item.id)
-              : delReply(item.Reply.id, item.Service.id, item.id)
-          }
-        />
-      ),
-    },
-    {
-      align: 'center',
-      render: (item) => (
-        <DangerButton
-          title="刪除回報紀錄"
-          message={'確認刪除?'}
-          onClick={() => delReport(item.id, item.Service.id)}
-        />
-      ),
+      render: (item) => {
+        return item.Service.Owner.account === item.User.account ? (
+          <div></div>
+        ) : (
+          <DangerButton
+            title="離開版面"
+            message={'確定離開版面?'}
+            onClick={() => leaveGroup(item.id)}
+          />
+        );
+      },
     },
   ];
 
   const content = (
     <antd.Spin spinning={spin}>
+      <div className="flex space-x-4  mb-3 ">
+        <div>
+          <antd.Input
+            addonBefore="搜尋版面"
+            onChange={(e) => setServiceName(e.target.value)}
+            allowClear
+            placeholder={`請輸入版面名稱`}
+          />
+        </div>
+      </div>
       <antd.Table
         dataSource={dataSource}
         columns={columns}
+        // pagination={false}
         pagination={{
           current: currentPage,
           pageSize: pageSize,
           total: pageCount,
-          onChange: (page) => getReport(page),
+          onChange: (page) => getGroup(page),
         }}
       />
     </antd.Spin>
@@ -185,12 +143,3 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
 
   return <MainPage title={'Home'} content={content} />;
 }
-
-export const getServerSideProps: GetServerSideProps = async ({ req, res, query }) => {
-  try {
-    return { props: {} };
-  } catch (error: any) {
-    console.log(error.message);
-    return { props: { error: error.message } };
-  }
-};

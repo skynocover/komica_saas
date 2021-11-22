@@ -9,11 +9,13 @@ import NavigationIcon from '@material-ui/icons/Navigation';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { Formik, useFormik } from 'formik';
+import { useRouter } from 'next/router';
 
 import { AppContext } from './AppContext';
 
 export const ReportForm = ({ id }: { id: string }) => {
   const appCtx = useContext(AppContext);
+  const router = useRouter();
 
   const useStyles = makeStyles((theme) => ({
     formControl: { margin: theme.spacing(1), minWidth: 120 },
@@ -35,6 +37,7 @@ export const ReportForm = ({ id }: { id: string }) => {
           postId: id,
           reason: values.reason,
           content: values.content,
+          serviceId: router.query.service as string,
         })
         .then(() => {
           appCtx.setDrawOpen(false);

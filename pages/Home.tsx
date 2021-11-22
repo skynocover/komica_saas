@@ -33,23 +33,20 @@ import { MemberList } from '../components/MemberList';
 
 dayjs.extend(utc);
 
-const pageSize = 8;
-
-export default function Index({ count }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Index({}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const appCtx = React.useContext(AppContext);
   const router = useRouter();
 
   const [folder, setFolder] = React.useState<boolean>(true);
   const [services, setServices] = React.useState<service[]>([]);
-
-  const id = router.query.id;
-  const page = router.query.page ? +router.query.page : 1;
-  const pageCount = Math.ceil(count / pageSize);
+  const [spin, setSpin] = React.useState<boolean>(true);
+  const [serviceName, setServiceName] = React.useState<string>('');
 
   const [authUser, loading, error] = useAuthState(auth);
 
   const getService = async () => {
-    const data = await appCtx.fetch('get', '/api/service');
+    setSpin(true);
+    const data = await appCtx.fetch('get', '/api/service?serviceName=' + serviceName);
     if (data) {
       setServices(
         data.services.map((item: any, index: number) => {
@@ -57,12 +54,12 @@ export default function Index({ count }: InferGetServerSidePropsType<typeof getS
         }),
       );
     }
+    setSpin(false);
   };
 
   const delService = async (id: string) => {
     const data = await appCtx.fetch('delete', '/api/service', { id });
     if (data) {
-      // router.reload();
       getService();
     }
   };
@@ -73,13 +70,11 @@ export default function Index({ count }: InferGetServerSidePropsType<typeof getS
     } else if (!authUser) {
       router.push('/');
     }
-  }, [authUser]);
+  }, [authUser, serviceName]);
 
   const finish = () => {
-    console.log('finish');
-    setFolder(true);
     getService();
-    // router.reload();
+    setFolder(true);
   };
 
   const columns: ColumnsType<service> = [
@@ -140,8 +135,17 @@ export default function Index({ count }: InferGetServerSidePropsType<typeof getS
   ];
 
   const content = (
-    <>
+    <antd.Spin spinning={spin}>
       <div className="flex justify-end mb-2">
+        <div>
+          <antd.Input
+            addonBefore="搜尋版面"
+            onChange={(e) => setServiceName(e.target.value)}
+            allowClear
+            placeholder={`請輸入版面名稱`}
+          />
+        </div>
+        <div className="flex-1" />
         <antd.Button type="primary" onClick={() => setFolder(!folder)}>
           {folder ? '新增留言板' : '取消新增'}
         </antd.Button>
@@ -155,7 +159,7 @@ export default function Index({ count }: InferGetServerSidePropsType<typeof getS
           expandedRowRender: (record) => <Service service={record} finish={finish} />,
         }}
       />
-    </>
+    </antd.Spin>
   );
 
   return <MainPage title={'Home'} content={content} />;

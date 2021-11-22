@@ -29,8 +29,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           service: { ...service, moderatorName: service?.ServiceMember[0].displayName },
         });
       } else {
+        const serviceName = req.query.serviceName ? `${req.query.serviceName}` : undefined;
+
         const temp_services = await prisma.service.findMany({
-          where: { Owner: { account: decodeToken.uid }, deletedAt: null },
+          where: {
+            name: { contains: serviceName },
+            Owner: { account: decodeToken.uid },
+            deletedAt: null,
+          },
           include: {
             Owner: { select: { account: true } },
             ServiceMember: { where: { User: { account: decodeToken.uid } } },
