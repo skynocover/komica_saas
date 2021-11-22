@@ -137,7 +137,7 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
     {
       align: 'center',
       render: (item) => (
-        <antd.Button type="primary" href={router.basePath + getLink(item)} target="_blank">
+        <antd.Button type="primary" href={getLink(item)} target="_blank">
           前往此文
         </antd.Button>
       ),

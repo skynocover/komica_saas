@@ -84,8 +84,8 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
 
   const [auth, setAuth] = React.useState<ServiceAuth>({
     visible: service ? service.auth.visible : 'allowAnonymous',
-    thread: service ? service.auth.thread : 'anonymous',
-    reply: service ? service.auth.reply : 'anonymous',
+    thread: service ? service.auth.thread : 'allowAnonymous',
+    reply: service ? service.auth.reply : 'allowAnonymous',
     report: service ? service.auth.report : 'allowAnonymous',
   });
 
@@ -218,8 +218,8 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
         setSelectModel(input);
         setAuth({
           visible: 'allowAnonymous',
-          thread: 'anonymous',
-          reply: 'anonymous',
+          thread: 'allowAnonymous',
+          reply: 'allowAnonymous',
           report: 'allowAnonymous',
         });
         break;
@@ -420,7 +420,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
           step={1}
           marks
           min={0}
-          max={4}
+          max={3}
         />
         <Typography className="pl-2 flex items-center" component="div">
           {'發文: ' + authText(auth.thread)}
@@ -434,7 +434,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
           step={1}
           marks
           min={0}
-          max={4}
+          max={3}
         />
         <Typography className="pl-2 flex items-center" component="div">
           {'回文: ' + authText(auth.reply)}

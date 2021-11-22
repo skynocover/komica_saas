@@ -40,10 +40,11 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
 
   React.useEffect(() => {
     init();
-  }, [authUser]);
+  }, []);
 
   const login = async (account: string, password: string) => {
     await signInWithEmailAndPassword(auth, account, password);
+    router.reload();
   };
 
   const LoginForm = () => {

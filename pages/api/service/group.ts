@@ -23,7 +23,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       const services = await prisma.serviceMember.findMany({
         where: {
           Service: { name: { contains: serviceName }, deletedAt: null },
-          User: { account: { not: decodeToken.uid } },
+          User: { account: decodeToken.uid },
         },
         include: {
           User: { select: { account: true } },

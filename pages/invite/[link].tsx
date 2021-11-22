@@ -30,16 +30,12 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
 
     const data = await appCtx.fetch('get', '/api/service/invitelinks?linkId=' + linkId);
     if (data) {
+      if (data.redirect) {
+        router.push('/service/' + data.serviceId);
+        return;
+      }
       setServiceName(data.serviceName);
       setServiceId(data.serviceId);
-      console.log(data.authRequire);
-      if (data.authRequire === 'anonymous') {
-        router.push('/service/' + data.serviceId);
-      } else if (data.authRequire === 'registered') {
-        router.push('/service/' + data.serviceId);
-      } else if (data.authRequire === 'invited') {
-        setState('loginJoin');
-      }
     }
   };
 
@@ -66,7 +62,7 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
 
   return (
     <>
-      {state === 'loginJoin' && (
+      {serviceName && (
         <div className="grid gird-cols-1  h-screen ">
           <div className="flex items-end justify-center">
             <p className="font-bold text-3xl">{`您已獲邀加入${serviceName}`}</p>

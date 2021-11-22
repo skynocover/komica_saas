@@ -11,6 +11,8 @@ import { firebaseAuth } from '../../../firebase/auth';
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   async function getInviteLink() {
     try {
+      const decodeToken = await firebaseAuth(req);
+
       const { linkId, id } = req.query;
       if (!id && !linkId) {
         res.json(Resp.paramInputEmpty);
@@ -18,8 +20,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       }
 
       if (typeof id === 'string') {
-        const decodeToken = await firebaseAuth(req);
-
+        // 後台取得某服務的邀請連結
         const service = await prisma.service.findFirst({
           where: { id, Owner: { account: decodeToken.uid } },
           select: { Owner: { select: { account: true } } },
@@ -37,6 +38,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         res.json({ ...Resp.success, Links });
         return;
       } else if (typeof linkId === 'string') {
+        // 取得邀請連結的資訊
         const link = await prisma.serviceInviteLink.findFirst({
           where: { id: linkId, OR: [{ expiredAt: { gt: new Date() } }, { expiredAt: null }] },
           include: { Service: true },
@@ -46,23 +48,26 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
         const auth = link.Service.auth as Prisma.JsonObject;
 
-        switch (auth.visible) {
-          case 'moderator':
-            throw new Error(`討論版未開放使用連結`);
-          default:
-            res.json({
-              ...Resp.success,
-              authRequire: auth.visible,
-              serviceId: link.Service.id,
-              serviceName: link.Service.name,
-            });
-            return;
-        }
+        if (auth.visible === 'moderator') throw new Error(`討論版未開放使用連結`);
+
+        const find = await prisma.serviceMember.findFirst({
+          where: { serviceId: link.Service.id, User: { account: decodeToken.uid } },
+        });
+
+        console.log(find);
+
+        res.json({
+          ...Resp.success,
+          redirect: !!find,
+          serviceId: link.Service.id,
+          serviceName: link.Service.name,
+        });
+        return;
       }
       res.json(Resp.paramInputFormateError);
     } catch (error: any) {
       console.log(error.message);
-      res.json({ error: error.message, ...Resp.sqlExecFail });
+      res.json({ error: error.message });
     }
   }
   async function postInviteLink() {
@@ -81,9 +86,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         return;
       }
 
-      await prisma.serviceInviteLink.create({
-        data: { Service: { connect: { id } } },
-      });
+      await prisma.serviceInviteLink.create({ data: { Service: { connect: { id } } } });
 
       res.json(Resp.success);
     } catch (error: any) {
@@ -108,9 +111,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         return;
       }
 
-      const link = await prisma.serviceInviteLink.findFirst({
-        where: { id, serviceId },
-      });
+      const link = await prisma.serviceInviteLink.findFirst({ where: { id, serviceId } });
       if (!link) {
         res.json(Resp.queryNotFound);
         return;

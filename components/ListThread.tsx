@@ -81,7 +81,7 @@ export const ListThreads = ({
     return (
       <div id={post.id} className="flex pt-2 items-center justify-center">
         {post.title ? (
-          <Link href={router.basePath + `/service/${serviceId}/${post.id}`} underline="always">
+          <Link href={`/service/${serviceId}/${post.id}`} underline="always">
             <span className="text-red-600"> {post.title}</span>
             <span className="text-blue-400">
               {post.Member ? post.Member.displayName : post.name}

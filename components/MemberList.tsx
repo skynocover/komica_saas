@@ -55,6 +55,11 @@ export const MemberList = ({ serviceId }: { serviceId: string }) => {
       render: (item) => <>{item.displayName}</>,
     },
     {
+      title: '加入時間',
+      align: 'center',
+      render: (item) => <>{dayjs(item.createdAt).format('YYYY-MM-DD HH:mm')}</>,
+    },
+    {
       align: 'center',
       render: (item) => (
         <DangerButton title="移除用戶" message={'移除用戶'} onClick={() => removeMember(item.id)} />

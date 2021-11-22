@@ -172,8 +172,6 @@ const AppProvider = ({ children }: AppProviderProps) => {
     router.push('/');
   };
 
-  //////// login
-
   /////////////////////////////////////////////////////
 
   return (

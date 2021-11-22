@@ -5,6 +5,7 @@ import { Resp, Tresp } from '../../../resp/resp';
 import { setLog } from '../../../utils/setLog';
 import { getBinarySize } from '../../../utils/getStringSize';
 import { firebaseAuth } from '../../../firebase/auth';
+import { auth2Int } from '../../../utils/serviceAuth';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   async function getService() {
@@ -60,7 +61,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   async function postService() {
     try {
       const decodeToken = await firebaseAuth(req);
-      console.log(decodeToken.uid);
 
       const user = await prisma.user.findFirst({ where: { account: decodeToken.uid } });
       if (!user) {
@@ -82,6 +82,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         moderatorName,
         forbidContents,
       } = req.body;
+
+      if (
+        auth2Int(visibleAuth) === -1 ||
+        auth2Int(threadAuth) === -1 ||
+        auth2Int(replyAuth) === -1 ||
+        auth2Int(reportAuth) === -1
+      ) {
+        res.json(Resp.paramInputFormateError);
+        return;
+      }
 
       const service = await prisma.service.create({
         data: {

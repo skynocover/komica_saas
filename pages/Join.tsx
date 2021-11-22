@@ -90,11 +90,7 @@ export default function Index() {
     {
       align: 'center',
       render: (item) => (
-        <antd.Button
-          type="primary"
-          href={`${router.basePath}/service/${item.Service.id}`}
-          target="_blank"
-        >
+        <antd.Button type="primary" href={`/service/${item.Service.id}`} target="_blank">
           前往版面
         </antd.Button>
       ),
