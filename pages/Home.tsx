@@ -101,7 +101,9 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
       render: (item) => (
         <antd.Popover
           content={
-            item.auth.visible === 'moderator' ? '討論版僅版主可見時無法邀請' : '建立或刪除連結'
+            item.auth.visible === 'moderator'
+              ? '討論版僅版主可見時無法邀請'
+              : '邀請朋友成為版面成員'
           }
         >
           <antd.Button

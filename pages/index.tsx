@@ -23,7 +23,9 @@ import { Thread, Reply } from '.prisma/client';
 import { auth } from '../firebase/firebaseClient';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
-export default function Index({}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Index({
+  subdomain,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const appCtx = React.useContext(AppContext);
   const router = useRouter();
 
@@ -31,8 +33,9 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
 
   const init = async () => {
     if (authUser) {
-      const data = await appCtx.fetch('post', '/api/account');
-      if (data) router.push('/Home');
+      const authToken = await authUser.getIdToken();
+      await axios.post('/api/account', {}, { headers: { Authorization: authToken } });
+      router.push('/Join');
     } else {
       console.log('no user');
     }
@@ -40,58 +43,10 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
 
   React.useEffect(() => {
     init();
-  }, []);
+  }, [authUser]);
 
-  const login = async (account: string, password: string) => {
-    await signInWithEmailAndPassword(auth, account, password);
-    router.reload();
-  };
-
-  const LoginForm = () => {
-    return (
-      <antd.Form
-        initialValues={{ account: 'user@gmail.com', password: '123456' }}
-        onFinish={(values) => login(values.account, values.password)}
-      >
-        <antd.Form.Item
-          name="account"
-          rules={[{ required: true, message: 'E-mail could not be empty!' }]}
-        >
-          <antd.Input prefix={<i className="fa fa-user" />} placeholder="Please Input E-mail" />
-        </antd.Form.Item>
-
-        <antd.Form.Item
-          name="password"
-          rules={[{ required: true, message: 'Password could not be empty!' }]}
-        >
-          <antd.Input.Password
-            prefix={<i className="fa fa-lock" />}
-            placeholder="Please Input Password"
-          />
-        </antd.Form.Item>
-
-        <antd.Form.Item>
-          <antd.Button type="primary" shape="round" htmlType="submit">
-            Login
-          </antd.Button>
-        </antd.Form.Item>
-
-        {/* <antd.Form.Item className="text-center">
-          <antd.Button
-            type="primary"
-            shape="round"
-            onClick={() => {
-              window.location.href = '/#/regist';
-            }}
-          >
-            Regist
-          </antd.Button>
-        </antd.Form.Item> */}
-        <antd.Button type="primary" shape="round" onClick={() => appCtx.login()}>
-          Login with Google
-        </antd.Button>
-      </antd.Form>
-    );
+  const emailLogin = async () => {
+    await signInWithEmailAndPassword(auth, 'user@gmail.com', '123456');
   };
 
   if (loading) {
@@ -99,20 +54,107 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
   }
 
   return (
-    <div className="grid gird-cols-1  h-screen ">
-      <div className="flex items-end justify-center">
-        <p className="font-bold text-4xl">Komica Craft</p>
+    <section className="flex flex-col md:flex-row h-screen items-center">
+      <div className="bg-indigo-600 hidden lg:block w-full md:w-1/2 xl:w-2/3 h-screen">
+        <img
+          src="https://source.unsplash.com/random"
+          alt=""
+          className="w-full h-full object-cover"
+        />
       </div>
 
-      <div className="flex justify-center">
-        <LoginForm />
+      <div
+        className="bg-white w-full md:max-w-md lg:max-w-full md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12
+        flex items-center justify-center"
+      >
+        <div className="w-full h-100">
+          <h1 className="text-xl md:text-2xl font-bold leading-tight mt-12">Kraft</h1>
+
+          <div className="mt-6">
+            {/* <div>
+              <label className="block text-gray-700">Email Address</label>
+              <input
+                type="email"
+                name=""
+                id=""
+                placeholder="Enter Email Address"
+                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+                autoFocus
+                required
+                value={account}
+                onChange={(e) => setAccount(e.target.value)}
+              />
+            </div>
+
+            <div className="mt-4">
+              <label className="block text-gray-700">Password</label>
+              <input
+                type="password"
+                name=""
+                id=""
+                placeholder="Enter Password"
+                minLength={6}
+                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500
+                focus:bg-white focus:outline-none"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div> */}
+
+            <button
+              className="w-full block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg
+              px-4 py-3 mt-6"
+              onClick={() => emailLogin()}
+            >
+              TRY DEMO?
+            </button>
+          </div>
+
+          <hr className="my-6 border-gray-300 w-full" />
+
+          <button
+            type="button"
+            className="w-full block bg-white hover:bg-gray-100 focus:bg-gray-100 text-gray-900 font-semibold rounded-lg px-4 py-3 border border-gray-300"
+            onClick={() => appCtx.login()}
+          >
+            <div className="flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                xmlnsXlink="http://www.w3.org/1999/xlink"
+                className="w-6 h-6"
+                viewBox="0 0 48 48"
+              >
+                <defs>
+                  <path
+                    id="a"
+                    d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-22 0-1.3-.2-2.7-.5-4z"
+                  />
+                </defs>
+                <clipPath id="b">
+                  <use xlinkHref="#a" overflow="visible" />
+                </clipPath>
+                <path clipPath="url(#b)" fill="#FBBC05" d="M0 37V11l17 13z" />
+                <path clipPath="url(#b)" fill="#EA4335" d="M0 11l17 13 7-6.1L48 14V0H0z" />
+                <path clipPath="url(#b)" fill="#34A853" d="M0 37l30-23 7.9 1L48 0v48H0z" />
+                <path clipPath="url(#b)" fill="#4285F4" d="M48 48L17 24l-4-3 35-10z" />
+              </svg>
+              <span className="ml-4">Log in with Google</span>
+            </div>
+          </button>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res, query }) => {
   try {
+    // 設定subdomain用
+    // let host = req.headers['x-forwarded-host'] || req.headers['host'];
+
+    // if (Array.isArray(host)) host = host[0];
+    // const subdomain = host?.split('.')[0];
     return { props: {} };
   } catch (error: any) {
     console.log(error.message);
