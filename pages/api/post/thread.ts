@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaPromise, Prisma } from '.prisma/client';
-// import type { ThreadCreateInput } from '.prisma/client';
 import { prisma } from '../../../database/db';
 
 import { Resp, Tresp } from '../../../resp/resp';
@@ -8,33 +7,18 @@ import { setLog } from '../../../utils/setLog';
 import { getBinarySize } from '../../../utils/getStringSize';
 import { firebaseAuth } from '../../../firebase/auth';
 import { genID } from '../../../utils/genID';
-
 import { checkUserAndGroup, checkAuth } from '../../../utils/checkServiceAuth';
+import { isYoutubeURL } from '../../../utils/regex';
+import { checkPostForm } from '../../../utils/checkPostForm';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   async function postThread() {
     try {
       const { title, image, youtubeID, content, name, serviceId } = req.body;
 
-      if (image && youtubeID) {
-        res.json(Resp.paramInputFormateError);
+      if (!title) {
+        res.json(Resp.paramInputEmpty);
         return;
-      }
-
-      const service = await prisma.service.findFirst({
-        where: { id: serviceId, deletedAt: null },
-        include: { Owner: { select: { account: true } } },
-      });
-      if (!service) {
-        res.json(Resp.queryNotFound);
-        return;
-      }
-
-      for (const forbid of service.forbidContents) {
-        if (content.includes(forbid)) {
-          res.json(Resp.contentForbidden);
-          return;
-        }
       }
 
       let uid = '';
@@ -42,17 +26,21 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         uid = (await firebaseAuth(req)).uid;
       } catch (error) {}
 
-      // 確認用戶service權限
-      const { user, member } = await checkUserAndGroup(serviceId, uid);
+      const { error, checkauth, user, member } = await checkPostForm({
+        image,
+        content,
+        serviceId,
+        youtubeID,
+        uid,
+      });
 
-      const checkauth = await checkAuth(service, uid, user, member);
-      if (!checkauth.thread) {
-        res.json(Resp.userPermissionDenied);
+      if (error) {
+        res.json(error);
         return;
       }
 
-      if (image && getBinarySize(image) > 4096 * 1000) {
-        res.json(Resp.imgLimit);
+      if (!checkauth!.thread) {
+        res.json(Resp.userPermissionDenied);
         return;
       }
 

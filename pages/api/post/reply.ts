@@ -8,30 +8,16 @@ import { getBinarySize } from '../../../utils/getStringSize';
 import { firebaseAuth } from '../../../firebase/auth';
 import { genID } from '../../../utils/genID';
 import { checkUserAndGroup, checkAuth } from '../../../utils/checkServiceAuth';
+import { checkPostForm } from '../../../utils/checkPostForm';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   async function postReply() {
     try {
       const { image, youtubeID, content, name, sage, parentId, serviceId } = req.body;
 
-      if (image && youtubeID) {
-        res.json(Resp.paramInputFormateError);
+      if (!parentId) {
+        res.json(Resp.paramInputEmpty);
         return;
-      }
-
-      const service = await prisma.service.findFirst({
-        where: { id: serviceId, deletedAt: null },
-        include: { Owner: { select: { account: true } } },
-      });
-      if (!service) {
-        res.json(Resp.queryNotFound);
-        return;
-      }
-      for (const forbid of service.forbidContents) {
-        if (content.includes(forbid)) {
-          res.json(Resp.contentForbidden);
-          return;
-        }
       }
 
       let uid = '';
@@ -39,18 +25,21 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         uid = (await firebaseAuth(req)).uid;
       } catch (error) {}
 
-      // 確認用戶service權限
-      const { user, member } = await checkUserAndGroup(serviceId, uid);
+      const { error, user, member, checkauth } = await checkPostForm({
+        image,
+        content,
+        serviceId,
+        youtubeID,
+        uid,
+      });
 
-      const checkauth = await checkAuth(service, uid, user, member);
-      if (!checkauth.reply) {
-        res.json(Resp.userPermissionDenied);
+      if (error) {
+        res.json(error);
         return;
       }
 
-      if (image && getBinarySize(image) > 4096 * 1000) {
-        res.json(Resp.imgLimit);
-        return;
+      if (!checkauth!.reply) {
+        return { error: Resp.userPermissionDenied, user: null, member: null };
       }
 
       let data: Prisma.ReplyCreateInput = {

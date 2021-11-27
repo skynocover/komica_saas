@@ -22,14 +22,6 @@ export const checkUserAndGroup = async (
   return { user, member };
 };
 
-// export const checkAuthSimple = async (
-//   service: Service & { Owner: { account: string } },
-//   uid: string,
-// ): Promise<ServiceAuthCheck> => {
-//   const { user, member } = await checkUserAndGroup(service.id, uid);
-//   return await checkAuth(service, uid, user, member);
-// };
-
 export const checkAuth = async (
   service: Service & { Owner: { account: string } },
   uid: string,
