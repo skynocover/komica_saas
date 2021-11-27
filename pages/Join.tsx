@@ -22,6 +22,7 @@ import { PostForm } from '../components/PostForm';
 import { Thread, Reply } from '.prisma/client';
 import { MainPage } from '../components/MainPage';
 import { auth } from '../firebase/firebaseClient';
+import { ReDisplayname } from '../components/ReDisplayname';
 
 import utc from 'dayjs/plugin/utc';
 
@@ -86,6 +87,25 @@ export default function Index() {
       title: '加入時間',
       align: 'center',
       render: (item) => <>{dayjs(item.createdAt).format('YYYY-MM-DDTHH:mm')}</>,
+    },
+    {
+      align: 'center',
+      render: (item) => (
+        <antd.Button
+          type="primary"
+          onClick={() =>
+            appCtx.setModal(
+              <ReDisplayname
+                serviceId={item.Service.id}
+                onfinished={getGroup}
+                displayName={item.displayName}
+              />,
+            )
+          }
+        >
+          修改顯示名稱
+        </antd.Button>
+      ),
     },
     {
       align: 'center',

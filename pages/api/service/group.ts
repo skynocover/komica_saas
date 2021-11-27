@@ -47,6 +47,37 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
   }
 
+  async function patchGroup() {
+    try {
+      const decodeToken = await firebaseAuth(req);
+
+      const { serviceId, displayName } = req.body;
+
+      if (!displayName || !serviceId) {
+        res.json(Resp.paramInputEmpty);
+        return;
+      }
+
+      const find = await prisma.serviceMember.findFirst({
+        where: { User: { account: decodeToken.uid }, serviceId },
+      });
+
+      if (!find) {
+        res.json(Resp.queryNotFound);
+        return;
+      }
+
+      await prisma.serviceMember.update({ data: { displayName }, where: { id: find.id } });
+
+      // console.log(find);
+
+      res.json(Resp.success);
+    } catch (error: any) {
+      console.log(error.message);
+      res.json({ error: error.message, ...Resp.sqlExecFail });
+    }
+  }
+
   async function delGroup() {
     try {
       const decodeToken = await firebaseAuth(req);
@@ -76,7 +107,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
     case 'GET':
       return await getGroup();
-
+    case 'PATCH':
+      return await patchGroup();
     case 'DELETE':
       return await delGroup();
     default:

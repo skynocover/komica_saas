@@ -68,6 +68,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         where: { userId: user.id, serviceId: service.id },
       });
 
+      // 有找到就傳成功,沒有則建立
       if (find) {
         res.json(Resp.success);
         return;
@@ -90,6 +91,21 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   async function delMember() {
     try {
+      const decodeToken = await firebaseAuth(req);
+
+      const { serviceId, id } = req.body;
+
+      const find = await prisma.serviceMember.findFirst({
+        where: { id, Service: { id: serviceId, Owner: { account: decodeToken.uid } } },
+      });
+
+      if (!find) {
+        res.json(Resp.queryNotFound);
+        return;
+      }
+
+      await prisma.serviceMember.delete({ where: { id } });
+
       res.json(Resp.success);
     } catch (error: any) {
       console.log(error.message);
