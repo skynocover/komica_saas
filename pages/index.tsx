@@ -90,7 +90,7 @@ export default function Index({
         </div>
       ) : (
         <div className="flex items-center justify-center h-60 mb-5">
-          <svg className="svg-icon " viewBox="0,0,20,20">
+          <svg className="svg-icon h-60" viewBox="0,0,20,20">
             <path
               fill="#808080"
               d="M6.523,7.683c0.96,0,1.738-0.778,1.738-1.738c0-0.96-0.778-1.738-1.738-1.738c-0.96,0-1.738,0.778-1.738,1.738
@@ -140,7 +140,7 @@ export default function Index({
             </div>
 
             {/* 活躍的公開討論串 */}
-            <div className="-mx-3 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-cols-1 gap-4  ">
+            <div className="-mx-3 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-cols-1 gap-2  ">
               {threads.map((thread, index) => (
                 <ThreadContent key={index} item={thread} />
               ))}
@@ -152,7 +152,7 @@ export default function Index({
                   <h3 className="text-xl mb-5 font-light">您已加入版面的最新討論串</h3>
                   <Divider />
                 </div>
-                <div className="-mx-3 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-cols-1 gap-4  ">
+                <div className="-mx-3 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-cols-1 gap-2  ">
                   {joinThreads.map((thread, index) => (
                     <ThreadContent key={index} item={thread} />
                   ))}
