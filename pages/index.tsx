@@ -16,6 +16,8 @@ import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged, Auth, User } f
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { PrismaClient, Prisma } from '@prisma/client';
 import ReactMarkdown from 'react-markdown';
+import Link from 'next/link';
+import axios from 'axios';
 
 import { Notification } from '../components/Notification';
 import { prisma } from '../database/db';
@@ -34,7 +36,6 @@ import { InviteLinkList } from '../components/InviteLinkList';
 import { MemberList } from '../components/MemberList';
 import { Image } from '../components/Image';
 import { Header } from '../components/Header';
-import Link from 'next/link';
 
 dayjs.extend(utc);
 
@@ -55,18 +56,16 @@ export default function Index({
 
   const [threads, setThreads] = React.useState<thread[]>([]);
   const [joinThreads, setJoinThreads] = React.useState<thread[]>([]);
+  const [authUser, loading, error] = useAuthState(auth);
 
   const init = async () => {
-    appCtx
-      .fetch('get', '/api/threads')
-      .then((data) => {
-        if (data) {
-          const { threads } = data;
-          setJoinThreads(threads);
-          // console.log(threads);
-        }
-      })
-      .catch();
+    authUser?.getIdToken().then((token) => {
+      axios.get('/api/threads', { headers: { Authorization: token } }).then((response) => {
+        const { data } = response;
+        const { threads } = data;
+        setJoinThreads(threads);
+      });
+    });
   };
 
   React.useEffect(() => {
