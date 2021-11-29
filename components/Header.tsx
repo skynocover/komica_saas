@@ -3,6 +3,7 @@ import ImageViewer from 'react-simple-image-viewer';
 import { useRouter } from 'next/router';
 import Popover from '@mui/material/Popover';
 import Button from '@mui/material/Button';
+import Link from 'next/link';
 
 import * as antd from 'antd';
 
@@ -130,19 +131,15 @@ export const Header = ({ title }: { title?: string }) => {
       <header className="text-gray-100 bg-gray-900 body-font shadow w-full">
         <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
           <nav className="flex lg:w-2/5 flex-wrap items-center text-base md:ml-auto">
-            <a
-              href="/"
-              className="mr-5 hover:text-gray-900 cursor-pointer border-b border-transparent hover:border-indigo-600"
-            >
-              Home
-            </a>
-            <a
-              href="https://skynocover.github.io/komica_saas_homepage/"
-              target="_blank"
-              className="mr-5 hover:text-gray-900 cursor-pointer border-b border-transparent hover:border-indigo-600"
-            >
-              About
-            </a>
+            <div className="mr-5 hover:text-gray-900 cursor-pointer border-b border-transparent hover:border-indigo-600">
+              <Link href="/">Home</Link>
+            </div>
+
+            <div className="mr-5 hover:text-gray-900 cursor-pointer border-b border-transparent hover:border-indigo-600">
+              <Link href="https://skynocover.github.io/komica_saas_homepage/">
+                <a target="_blank">About</a>
+              </Link>
+            </div>
           </nav>
           <a className="flex order-first lg:order-none lg:w-1/5 title-font font-medium items-center lg:items-center lg:justify-center mb-4 md:mb-0">
             <span className="ml-3 text-xl">{title}</span>

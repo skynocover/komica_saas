@@ -142,7 +142,7 @@ export default function Index({
             {/* 活躍的公開討論串 */}
             <div className="-mx-3 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-cols-1 gap-4  ">
               {threads.map((thread, index) => (
-                <ThreadContent item={thread} />
+                <ThreadContent key={index} item={thread} />
               ))}
             </div>
 
@@ -154,7 +154,7 @@ export default function Index({
                 </div>
                 <div className="-mx-3 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-cols-1 gap-4  ">
                   {joinThreads.map((thread, index) => (
-                    <ThreadContent item={thread} />
+                    <ThreadContent key={index} item={thread} />
                   ))}
                 </div>
               </>
