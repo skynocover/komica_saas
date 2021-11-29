@@ -34,6 +34,7 @@ import { InviteLinkList } from '../components/InviteLinkList';
 import { MemberList } from '../components/MemberList';
 import { Image } from '../components/Image';
 import { Header } from '../components/Header';
+import Link from 'next/link';
 
 dayjs.extend(utc);
 
@@ -107,9 +108,9 @@ export default function Index({
       )}
 
       <h2 className="text-lg text-gray-900 font-medium title-font mb-4">
-        <a href={`/service/${item.Service.id}/${item.id}`} target="_blank">
-          {item.title}
-        </a>
+        <Link href={`/service/${item.Service.id}/${item.id}`}>
+          <a target="_blank">{item.title}</a>
+        </Link>
       </h2>
       <p className="leading-relaxed text-base">
         <ReactMarkdown children={item.content} />
