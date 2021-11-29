@@ -30,6 +30,8 @@ import { DangerButton } from '../components/DangerButton';
 import { auth } from '../firebase/firebaseClient';
 import { InviteLinkList } from '../components/InviteLinkList';
 import { MemberList } from '../components/MemberList';
+import { Header } from '../components/Header';
+import { Report } from '../components/Report';
 
 dayjs.extend(utc);
 
@@ -70,7 +72,7 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
     } else if (!authUser) {
       router.push('/');
     }
-  }, [authUser, serviceName]);
+  }, [authUser]);
 
   const finish = () => {
     getService();
@@ -136,35 +138,51 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
     },
   ];
 
-  const content = (
-    <antd.Spin spinning={spin}>
+  const Services = (
+    <>
       <div className="flex justify-end mb-2">
-        <div>
+        <div className="flex">
           <antd.Input
-            addonBefore="搜尋版面"
+            value={serviceName}
             onChange={(e) => setServiceName(e.target.value)}
             allowClear
-            placeholder={`請輸入版面名稱`}
+            placeholder="請輸入版面名稱"
           />
+          <antd.Button type="primary" onClick={() => getService()}>
+            搜尋版面
+          </antd.Button>
         </div>
         <div className="flex-1" />
         <antd.Button type="primary" onClick={() => setFolder(!folder)}>
-          {folder ? '新增留言板' : '取消新增'}
+          {folder ? '新增版塊' : '取消新增'}
         </antd.Button>
       </div>
-      {folder || <Service finish={finish} />}
-      <antd.Table
-        dataSource={services}
-        columns={columns}
-        pagination={false}
-        expandable={{
-          expandedRowRender: (record) => <Service service={record} finish={finish} />,
-        }}
-      />
-    </antd.Spin>
+      <antd.Spin spinning={spin}>
+        {folder || <Service finish={finish} />}
+        <antd.Table
+          dataSource={services}
+          columns={columns}
+          pagination={false}
+          expandable={{
+            expandedRowRender: (record) => <Service service={record} finish={finish} />,
+          }}
+        />
+      </antd.Spin>
+    </>
   );
 
-  return <MainPage title={'Home'} content={content} />;
+  const content = (
+    <antd.Tabs defaultActiveKey="1">
+      <antd.Tabs.TabPane tab="建立的討論版" key="1">
+        {Services}
+      </antd.Tabs.TabPane>
+      <antd.Tabs.TabPane tab="版面回報" key="2">
+        <Report setSpin={setSpin} />
+      </antd.Tabs.TabPane>
+    </antd.Tabs>
+  );
+
+  return <MainPage title={'管理討論版'} content={content} />;
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res, query }) => {

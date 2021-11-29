@@ -7,6 +7,7 @@ import { getBinarySize } from '../../../utils/getStringSize';
 import { firebaseAuth } from '../../../firebase/auth';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  // 取得服務內所有成員
   async function getMember() {
     try {
       const decodeToken = await firebaseAuth(req);
@@ -33,6 +34,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       res.json({ error: error.message, ...Resp.sqlExecFail });
     }
   }
+  // 為服務添加人員 (使用invate link)
   async function postMember() {
     try {
       const decodeToken = await firebaseAuth(req);
@@ -89,6 +91,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
   }
 
+  // 從服務移除人員
   async function delMember() {
     try {
       const decodeToken = await firebaseAuth(req);

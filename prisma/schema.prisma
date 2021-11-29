@@ -21,14 +21,15 @@ model User {
 }
 
 model Service {
-    id             String   @id @default(dbgenerated()) @map("_id") @db.ObjectId
+    id             String      @id @default(dbgenerated()) @map("_id") @db.ObjectId
     name           String
     topLink        Json
     headLink       Json
     description    String
     forbidContents String[]
-    limitPostCount Int      @default(3)
-    limitPostMin   Int      @default(5)
+    limitPostCount Int         @default(3)
+    limitPostMin   Int         @default(5)
+    visible        serviceAuth
     auth           Json
 
     createdAt DateTime  @default(now())
@@ -41,6 +42,13 @@ model Service {
     Report            Report[]
     ServiceMember     ServiceMember[]
     ServiceInviteLink ServiceInviteLink[]
+}
+
+enum serviceAuth {
+    allowAnonymous
+    registered
+    invited
+    moderator
 }
 
 model ServiceInviteLink {

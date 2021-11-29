@@ -23,6 +23,7 @@ import { Thread, Reply } from '.prisma/client';
 import { MainPage } from '../components/MainPage';
 import { auth } from '../firebase/firebaseClient';
 import { ReDisplayname } from '../components/ReDisplayname';
+import { Header } from '../components/Header';
 
 import utc from 'dayjs/plugin/utc';
 

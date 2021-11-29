@@ -153,7 +153,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
       createdAt: dayjs(temp_service.createdAt).format('YYYY-MM-DD HH:mm:ss'),
     };
 
-    return { props: { service, threads, checkauth, displayName: member?.displayName } };
+    return {
+      props: { service, threads, checkauth, displayName: member ? member.displayName : null },
+    };
   } catch (error: any) {
     console.log(error.message);
     return { props: { error: error.message } };

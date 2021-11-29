@@ -7,6 +7,7 @@ import { getBinarySize } from '../../../utils/getStringSize';
 import { firebaseAuth } from '../../../firebase/auth';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  // 取得自己加入的群組
   async function getGroup() {
     try {
       const decodeToken = await firebaseAuth(req);
@@ -47,6 +48,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
   }
 
+  // 修改自己在群組的資訊
   async function patchGroup() {
     try {
       const decodeToken = await firebaseAuth(req);
@@ -78,6 +80,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
   }
 
+  // 離開群組
   async function delGroup() {
     try {
       const decodeToken = await firebaseAuth(req);

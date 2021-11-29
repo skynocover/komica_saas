@@ -9,18 +9,18 @@ import dayjs from 'dayjs';
 import * as antd from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { Notification } from '../components/Notification';
+import { Notification } from './Notification';
 import { prisma } from '../database/db';
-import { AppContext } from '../components/AppContext';
-import { DangerButton } from '../components/DangerButton';
+import { AppContext } from './AppContext';
+import { DangerButton } from './DangerButton';
 
 import { makeStyles } from '@material-ui/core/styles';
-import { Pages } from '../components/Pagination';
-import { ListThreads } from '../components/ListThread';
-import { ReportForm } from '../components/ReportForm';
-import { PostForm } from '../components/PostForm';
+import { Pages } from './Pagination';
+import { ListThreads } from './ListThread';
+import { ReportForm } from './ReportForm';
+import { PostForm } from './PostForm';
 import { Thread, Reply } from '.prisma/client';
-import { MainPage } from '../components/MainPage';
+import { MainPage } from './MainPage';
 import { auth } from '../firebase/firebaseClient';
 
 import utc from 'dayjs/plugin/utc';
@@ -51,14 +51,13 @@ interface reply {
   thread: thread;
 }
 
-export default function Index({}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export const Report = ({ setSpin }: { setSpin: any }) => {
   const appCtx = React.useContext(AppContext);
   const router = useRouter();
 
   const [dataSource, setDataSource] = React.useState<any[]>([]);
   const [count, setCount] = React.useState<number>(0);
   const [currentPage, setCurrentPage] = React.useState<number>(1);
-  const [spin, setSpin] = React.useState<boolean>(true);
 
   const pageCount = Math.ceil(count / pageSize);
 
@@ -168,29 +167,16 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
     },
   ];
 
-  const content = (
-    <antd.Spin spinning={spin}>
-      <antd.Table
-        dataSource={dataSource}
-        columns={columns}
-        pagination={{
-          current: currentPage,
-          pageSize: pageSize,
-          total: pageCount,
-          onChange: (page) => getReport(page),
-        }}
-      />
-    </antd.Spin>
+  return (
+    <antd.Table
+      dataSource={dataSource}
+      columns={columns}
+      pagination={{
+        current: currentPage,
+        pageSize: pageSize,
+        total: pageCount,
+        onChange: (page) => getReport(page),
+      }}
+    />
   );
-
-  return <MainPage title="Report" content={content} />;
-}
-
-export const getServerSideProps: GetServerSideProps = async ({ req, res, query }) => {
-  try {
-    return { props: {} };
-  } catch (error: any) {
-    console.log(error.message);
-    return { props: { error: error.message } };
-  }
 };
