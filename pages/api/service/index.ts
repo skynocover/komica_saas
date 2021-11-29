@@ -99,6 +99,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           topLink,
           headLink,
           forbidContents,
+          visible: visibleAuth,
           auth: {
             visible: visibleAuth,
             thread: threadAuth,
