@@ -109,8 +109,9 @@ export const Report = ({ setSpin }: { setSpin: any }) => {
 
   const columns: ColumnsType<report> = [
     {
-      title: 'Service',
+      title: '討論版',
       align: 'center',
+      fixed: 'left',
       render: (item) => <>{item.Service.name}</>,
     },
     {
@@ -171,6 +172,7 @@ export const Report = ({ setSpin }: { setSpin: any }) => {
     <antd.Table
       dataSource={dataSource}
       columns={columns}
+      scroll={{ x: 800 }}
       pagination={{
         current: currentPage,
         pageSize: pageSize,

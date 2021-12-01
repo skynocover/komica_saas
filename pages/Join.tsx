@@ -75,8 +75,9 @@ export default function Index() {
 
   const columns: ColumnsType<any> = [
     {
-      title: 'Service',
+      title: '討論版',
       align: 'center',
+      fixed: 'left',
       render: (item) => <>{item.Service.name}</>,
     },
     {
@@ -134,7 +135,7 @@ export default function Index() {
 
   const content = (
     <antd.Spin spinning={spin}>
-      <div className="flex space-x-4  mb-3 ">
+      <div className="flex space-x-4 my-3 ">
         <div>
           <antd.Input
             addonBefore="搜尋版面"
@@ -147,6 +148,7 @@ export default function Index() {
       <antd.Table
         dataSource={dataSource}
         columns={columns}
+        scroll={{ x: 800 }}
         pagination={{
           current: currentPage,
           pageSize: pageSize,
