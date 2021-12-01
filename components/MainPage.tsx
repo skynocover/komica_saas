@@ -19,12 +19,11 @@ interface MainPageProps {
 const MainPage = ({ title, content }: MainPageProps) => {
   const router = useRouter();
   const appCtx = React.useContext(AppContext);
-  const [collapsed, setCollapsed] = React.useState<boolean>(true);
 
   return (
     <>
       <Header title={title} />
-      <div className="m-3">{content}</div>
+      <div className="mx-3">{content}</div>
     </>
   );
 };

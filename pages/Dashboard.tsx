@@ -81,9 +81,10 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
 
   const columns: ColumnsType<service> = [
     {
-      title: 'name',
+      title: '名稱',
       align: 'center',
       dataIndex: 'name',
+      fixed: 'left',
     },
     {
       title: '建立時間',
@@ -160,6 +161,7 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
       <antd.Spin spinning={spin}>
         {folder || <Service finish={finish} />}
         <antd.Table
+          scroll={{ x: 800 }}
           dataSource={services}
           columns={columns}
           pagination={false}

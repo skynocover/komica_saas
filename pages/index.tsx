@@ -146,6 +146,7 @@ export default function Index({
               ))}
             </div>
 
+            {/* 您已加入版面的最新討論串 */}
             {joinThreads.length > 0 && (
               <>
                 <div className="text-center max-w-xl mx-auto">

@@ -147,7 +147,7 @@ export const Header = ({ title }: { title?: string }) => {
               </Link>
             </div>
           </nav>
-          <a className="flex order-first lg:order-none lg:w-1/5 title-font font-medium items-center lg:items-center lg:justify-center mb-4 md:mb-0">
+          <a className="flex order-first lg:order-none lg:w-1/5 title-font font-medium items-center lg:items-center lg:justify-center">
             <span className="ml-3 text-xl">{title}</span>
           </a>
 
