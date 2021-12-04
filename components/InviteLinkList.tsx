@@ -15,6 +15,7 @@ import ReportIcon from '@mui/icons-material/Report';
 import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged, Auth, User } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
+import { useTranslation } from 'react-i18next';
 
 import { AppContext, thread } from './AppContext';
 import { DangerButton } from './DangerButton';
@@ -27,6 +28,7 @@ interface InviteLink {
 export const InviteLinkList = ({ serviceId }: { serviceId: string }) => {
   const appCtx = React.useContext(AppContext);
   const router = useRouter();
+  const { t } = useTranslation();
 
   const [loading, setLoading] = React.useState<boolean>(true);
   const [dataSource, setDataSource] = React.useState<InviteLink[]>([]);
@@ -59,7 +61,7 @@ export const InviteLinkList = ({ serviceId }: { serviceId: string }) => {
 
   const columns: ColumnsType<InviteLink> = [
     {
-      title: '連結',
+      title: t('Link'),
       align: 'center',
       render: (item) => (
         <antd.Typography.Paragraph copyable>
@@ -68,7 +70,7 @@ export const InviteLinkList = ({ serviceId }: { serviceId: string }) => {
       ),
     },
     {
-      title: '過期時間',
+      title: t('Expiration'),
       align: 'center',
       render: (item) => (
         <>
@@ -80,7 +82,7 @@ export const InviteLinkList = ({ serviceId }: { serviceId: string }) => {
       align: 'center',
       render: (item) => (
         <antd.Button type="primary" onClick={() => postponeLink(item.id)}>
-          {item.expiredAt ? '延期七天過期' : '設定七天後過期'}
+          {item.expiredAt ? t('SetPostPoned') : t('SetExpiration')}
         </antd.Button>
       ),
     },
@@ -88,7 +90,11 @@ export const InviteLinkList = ({ serviceId }: { serviceId: string }) => {
     {
       align: 'center',
       render: (item) => (
-        <DangerButton title="刪除連結" message={'確認刪除?'} onClick={() => delLink(item.id)} />
+        <DangerButton
+          title={t('Delete')}
+          message={t('ConfirmDelete') + '?'}
+          onClick={() => delLink(item.id)}
+        />
       ),
     },
   ];
@@ -97,7 +103,7 @@ export const InviteLinkList = ({ serviceId }: { serviceId: string }) => {
     <antd.Spin spinning={loading}>
       <div className="flex justify-end mb-2">
         <antd.Button type="primary" onClick={() => createLink()}>
-          新增連結
+          {t('AddLink')}
         </antd.Button>
       </div>
       <antd.Table dataSource={dataSource} columns={columns} pagination={false} />

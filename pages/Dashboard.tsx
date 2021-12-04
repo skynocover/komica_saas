@@ -14,6 +14,7 @@ import utc from 'dayjs/plugin/utc';
 import ReportIcon from '@mui/icons-material/Report';
 import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged, Auth, User } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { useTranslation, initReactI18next } from 'react-i18next';
 
 import { Notification } from '../components/Notification';
 import { prisma } from '../database/db';
@@ -45,6 +46,7 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
   const [serviceName, setServiceName] = React.useState<string>('');
 
   const [authUser, loading, error] = useAuthState(auth);
+  const { t } = useTranslation();
 
   const getService = async () => {
     setSpin(true);
@@ -81,13 +83,13 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
 
   const columns: ColumnsType<service> = [
     {
-      title: '名稱',
+      title: t('Name'),
       align: 'center',
       dataIndex: 'name',
       fixed: 'left',
     },
     {
-      title: '建立時間',
+      title: t('CreateTime'),
       align: 'center',
       render: (item) => <>{dayjs(item.createdAt).format('YYYY-MM-DDTHH:mm')}</>,
     },
@@ -95,7 +97,7 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
       align: 'center',
       render: (item) => (
         <antd.Button type="primary" href={'/service/' + item.id} target="_blank">
-          前往
+          {t('Goto')}
         </antd.Button>
       ),
     },
@@ -105,8 +107,8 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
         <antd.Popover
           content={
             item.auth.visible === 'moderator'
-              ? '討論版僅版主可見時無法邀請'
-              : '邀請朋友成為版面成員'
+              ? t('CouldInviteIfOnlyModeratorVis')
+              : t('InviteYourFriendJoin')
           }
         >
           <antd.Button
@@ -114,7 +116,7 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
             disabled={item.auth.visible === 'moderator'}
             onClick={() => appCtx.setModal(<InviteLinkList serviceId={item.id} />, 1000)}
           >
-            邀請連結列表
+            {t('InviteLinkList')}
           </antd.Button>
         </antd.Popover>
       ),
@@ -127,14 +129,18 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
           disabled={item.auth.visible === 'moderator'}
           onClick={() => appCtx.setModal(<MemberList serviceId={item.id} />)}
         >
-          成員列表
+          {t('MemberList')}
         </antd.Button>
       ),
     },
     {
       align: 'center',
       render: (item) => (
-        <DangerButton title="刪除服務" message={'確認刪除?'} onClick={() => delService(item.id)} />
+        <DangerButton
+          title={t('DeleteBaord')}
+          message={t('ConfirmDelete') + '?'}
+          onClick={() => delService(item.id)}
+        />
       ),
     },
   ];
@@ -147,15 +153,15 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
             value={serviceName}
             onChange={(e) => setServiceName(e.target.value)}
             allowClear
-            placeholder="請輸入版面名稱"
+            placeholder={t('PleaseInputBoardName')}
           />
           <antd.Button type="primary" onClick={() => getService()}>
-            搜尋版面
+            {t('SearchBoard')}
           </antd.Button>
         </div>
         <div className="flex-1" />
         <antd.Button type="primary" onClick={() => setFolder(!folder)}>
-          {folder ? '新增版塊' : '取消新增'}
+          {folder ? t('AddBoard') : t('CancelAdd')}
         </antd.Button>
       </div>
       <antd.Spin spinning={spin}>
@@ -175,16 +181,16 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
 
   const content = (
     <antd.Tabs defaultActiveKey="1">
-      <antd.Tabs.TabPane tab="建立的討論版" key="1">
+      <antd.Tabs.TabPane tab={t('CreatedBoard')} key="1">
         {Services}
       </antd.Tabs.TabPane>
-      <antd.Tabs.TabPane tab="版面回報" key="2">
+      <antd.Tabs.TabPane tab={t('ReportBoard')} key="2">
         <Report setSpin={setSpin} />
       </antd.Tabs.TabPane>
     </antd.Tabs>
   );
 
-  return <MainPage title={'管理討論版'} content={content} />;
+  return <MainPage title={t('Dashboard')} content={content} />;
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res, query }) => {

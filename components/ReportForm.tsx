@@ -10,12 +10,14 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { Formik, useFormik } from 'formik';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
 import { AppContext } from './AppContext';
 
 export const ReportForm = ({ id }: { id: string }) => {
   const appCtx = useContext(AppContext);
   const router = useRouter();
+  const { t } = useTranslation();
 
   const useStyles = makeStyles((theme) => ({
     formControl: { margin: theme.spacing(1), minWidth: 120 },
@@ -41,7 +43,7 @@ export const ReportForm = ({ id }: { id: string }) => {
         })
         .then(() => {
           appCtx.setDrawOpen(false);
-          appCtx.sanckBar('回報成功', 'success');
+          appCtx.sanckBar(t('Report') + t('Success'), 'success');
           formik.resetForm();
         });
     },
@@ -51,7 +53,7 @@ export const ReportForm = ({ id }: { id: string }) => {
     <div className="flex justify-center">
       <div className="lg:w-1/3 md:w-1/2 sm:w-2/3 w-full grid grid-cols-1 ">
         <FormControl variant="filled" className={classes.formControl}>
-          <InputLabel id="demo-simple-select-filled-label">回報原因</InputLabel>
+          <InputLabel id="demo-simple-select-filled-label">{t('ReportReason')}</InputLabel>
           <Select
             labelId="demo-simple-select-filled-label"
             id="demo-simple-select-filled"
@@ -59,8 +61,8 @@ export const ReportForm = ({ id }: { id: string }) => {
             value={formik.values.reason}
             onChange={formik.handleChange}
           >
-            <MenuItem value={'del'}>刪文請求</MenuItem>
-            <MenuItem value={'war'}>引戰</MenuItem>
+            <MenuItem value={'del'}>{t('DeleteRequest')}</MenuItem>
+            <MenuItem value={'war'}>{t('HateSpeech')}</MenuItem>
           </Select>
         </FormControl>
         <TextField
@@ -69,9 +71,9 @@ export const ReportForm = ({ id }: { id: string }) => {
           error={formik.errors.content ? true : false}
           helperText={formik.errors.content}
           rows={4}
-          label="回報內容"
+          label={t('ReportContent')}
           variant="filled"
-          placeholder="可使用markdown語法"
+          placeholder={t('MarkdownUsable')}
           name="content"
           onChange={formik.handleChange}
         />
@@ -83,7 +85,7 @@ export const ReportForm = ({ id }: { id: string }) => {
           onClick={() => formik.handleSubmit()}
         >
           <NavigationIcon />
-          回報
+          {t('Report')}
         </Fab>
       </div>
     </div>

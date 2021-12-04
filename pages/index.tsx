@@ -18,6 +18,7 @@ import { PrismaClient, Prisma } from '@prisma/client';
 import ReactMarkdown from 'react-markdown';
 import Link from 'next/link';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 
 import { Notification } from '../components/Notification';
 import { prisma } from '../database/db';
@@ -53,6 +54,7 @@ export default function Index({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const appCtx = React.useContext(AppContext);
   const router = useRouter();
+  const { t } = useTranslation();
 
   const [threads, setThreads] = React.useState<thread[]>([]);
   const [joinThreads, setJoinThreads] = React.useState<thread[]>([]);
@@ -135,7 +137,7 @@ export default function Index({
           <div className="w-full max-w-6xl mx-auto">
             <div className="text-center max-w-xl mx-auto">
               <h1 className="text-6xl md:text-7xl font-bold mb-5 text-gray-600">Akraft</h1>
-              <h3 className="text-xl mb-5 font-light">活躍的公開討論串</h3>
+              <h3 className="text-xl mb-5 font-light">{t('ActivePublicThread')}</h3>
               <Divider />
             </div>
 
@@ -150,7 +152,7 @@ export default function Index({
             {joinThreads.length > 0 && (
               <>
                 <div className="text-center max-w-xl mx-auto">
-                  <h3 className="text-xl mb-5 font-light">您已加入版面的最新討論串</h3>
+                  <h3 className="text-xl mb-5 font-light">{t('JoinedBoardThread')}</h3>
                   <Divider />
                 </div>
                 <div className="-mx-3 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-cols-1 gap-2  ">

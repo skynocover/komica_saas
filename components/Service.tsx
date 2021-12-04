@@ -23,8 +23,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import NavigationIcon from '@material-ui/icons/Navigation';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import { useTranslation } from 'react-i18next';
 
-import { auth, auth2Int, int2Auth, ServiceAuth, authText } from '../utils/serviceAuth';
+import { auth, auth2Int, int2Auth, ServiceAuth } from '../utils/serviceAuth';
 
 const useStyles = makeStyles((theme) => ({
   margin: { margin: theme.spacing(1) },
@@ -37,7 +38,6 @@ interface FormProps {
   limitPostCount: number;
   limitPostMin: number;
   moderatorName: string;
-  // link: Link[];
 }
 
 interface Link {
@@ -71,6 +71,7 @@ export interface service {
 export const Service = ({ service, finish }: { service?: service; finish: any }) => {
   const appCtx = useContext(AppContext);
   const router = useRouter();
+  const { t } = useTranslation();
 
   const classes = useStyles();
 
@@ -88,6 +89,19 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
     reply: service ? service.auth.reply : 'allowAnonymous',
     report: service ? service.auth.report : 'allowAnonymous',
   });
+
+  const authText = (input: auth): string => {
+    switch (input) {
+      case 'moderator':
+        return t('OnlyModerator');
+      case 'invited':
+        return t('OnlyMember');
+      case 'registered':
+        return t('OnlyRegistered');
+      default:
+        return t('AllowAnonymous');
+    }
+  };
 
   const addTopLink = (i: number) => {
     setTopLinks((preState) => {
@@ -267,10 +281,10 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
     validateOnChange: false,
     validate: (values) => {
       let errors: any = {};
-      if (!values.name) errors.name = '名稱必填';
-      if (!values.moderatorName) errors.moderatorName = '版主名稱必填';
-      if (!Number.isInteger(values.limitPostCount)) errors.limitPostCount = '次數限制格式錯誤';
-      if (!Number.isInteger(values.limitPostMin)) errors.limitPostMin = '次數限制格式錯誤';
+      if (!values.name) errors.name = t('NameRequired');
+      if (!values.moderatorName) errors.moderatorName = t('ModeratorNameRequired');
+      // if (!Number.isInteger(values.limitPostCount)) errors.limitPostCount = '次數限制格式錯誤';
+      // if (!Number.isInteger(values.limitPostMin)) errors.limitPostMin = '次數限制格式錯誤';
 
       return errors;
     },
@@ -294,7 +308,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
 
         if (data) {
           action.resetForm();
-          appCtx.sanckBar('修改服務成功', 'success');
+          appCtx.sanckBar(t('ModifyBoardSuccess'), 'success');
           finish();
         }
       } else {
@@ -315,7 +329,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
 
         if (data) {
           action.resetForm();
-          appCtx.sanckBar('新增服務成功', 'success');
+          appCtx.sanckBar(t('AddBoardSuccess'), 'success');
           finish();
         }
       }
@@ -327,17 +341,17 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
       <div className="lg:w-1/2  sm:w-2/3 w-full grid grid-cols-2 gap-1">
         {!service && (
           <Select
-            label="模板"
+            label={t('Template')}
             className={'col-span-2'}
             variant="filled"
             value={selectModel}
             onChange={(e) => modelChoose(e.target.value)}
           >
-            <MenuItem value={1}>匿名討論版</MenuItem>
-            <MenuItem value={2}>社團討論版</MenuItem>
-            <MenuItem value={3}>部落格</MenuItem>
-            <MenuItem value={4}>佈告欄</MenuItem>
-            <MenuItem value={5}>不使用模板</MenuItem>
+            <MenuItem value={1}>{t('AnonymousBoard')} </MenuItem>
+            <MenuItem value={2}>{t('GroupBoard')}</MenuItem>
+            <MenuItem value={3}>{t('Blog')}</MenuItem>
+            <MenuItem value={4}>{t('BulletinBoard')}</MenuItem>
+            <MenuItem value={5}>{t('TemplateLess')}</MenuItem>
           </Select>
         )}
 
@@ -347,7 +361,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
           error={formik.errors.name ? true : false}
           helperText={formik.errors.name}
           name="name"
-          label="名稱"
+          label={t('Name')}
           variant="filled"
           value={formik.values.name}
           onChange={formik.handleChange}
@@ -358,10 +372,10 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
           onChange={formik.handleChange}
           multiline
           rows={4}
-          label="描述"
+          label={t('Describe')}
           variant="filled"
           value={formik.values.description}
-          placeholder="可使用markdown語法"
+          placeholder={t('MarkdownUsable')}
         />
         <TextField
           className="col-span-2"
@@ -369,7 +383,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
           error={formik.errors.moderatorName ? true : false}
           helperText={formik.errors.moderatorName}
           name="moderatorName"
-          label="版主名稱"
+          label={t('ModeratorName')}
           variant="filled"
           value={formik.values.moderatorName}
           onChange={formik.handleChange}
@@ -409,7 +423,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
           max={3}
         />
         <Typography className="pl-2 flex items-center" component="div">
-          {'討論版可見: ' + authText(auth.visible)}
+          {t('BoardVisible') + ': ' + authText(auth.visible)}
         </Typography>
 
         <Slider
@@ -423,7 +437,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
           max={3}
         />
         <Typography className="pl-2 flex items-center" component="div">
-          {'發文: ' + authText(auth.thread)}
+          {t('Post') + ': ' + authText(auth.thread)}
         </Typography>
 
         <Slider
@@ -437,7 +451,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
           max={3}
         />
         <Typography className="pl-2 flex items-center" component="div">
-          {'回文: ' + authText(auth.reply)}
+          {t('Reply') + ': ' + authText(auth.reply)}
         </Typography>
 
         <Slider
@@ -451,12 +465,12 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
           max={3}
         />
         <Typography className="pl-2 flex items-center" component="div">
-          {'回報: ' + authText(auth.report)}
+          {t('Report') + ': ' + authText(auth.report)}
         </Typography>
 
         <div className="col-span-2 flex">
           <Typography variant="h6" component="div">
-            頂部連結
+            {t('TopLink')}
           </Typography>
 
           <div className="flex-1" />
@@ -471,7 +485,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
             <TextField
               className="w-1/4"
               name={`${item}_${index}_name`}
-              label="名稱"
+              label={t('Name')}
               variant="outlined"
               value={item.name}
               onChange={(e) => changeTopName(index, e.target.value)}
@@ -479,7 +493,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
             <TextField
               className="flex-1"
               name={`${item}_${index}_url`}
-              label="連結網址"
+              label={t('LinkURL')}
               variant="outlined"
               value={item.url}
               onChange={(e) => changeTopURL(index, e.target.value)}
@@ -496,7 +510,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
 
         <div className="col-span-2 flex">
           <Typography variant="h6" gutterBottom component="div">
-            標題連結
+            {t('TitleLink')}
           </Typography>
 
           <div className="flex-1" />
@@ -511,7 +525,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
             <TextField
               className="w-1/4"
               name={`${item}_${index}_name`}
-              label="名稱"
+              label={t('Name')}
               variant="outlined"
               value={item.name}
               onChange={(e) => changeHeadName(index, e.target.value)}
@@ -519,7 +533,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
             <TextField
               className="flex-1"
               name={`${item}_${index}_url`}
-              label="連結網址"
+              label={t('LinkURL')}
               variant="outlined"
               value={item.url}
               onChange={(e) => changeHeadURL(index, e.target.value)}
@@ -537,7 +551,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
 
         <div className="col-span-2 flex">
           <Typography variant="h6" gutterBottom component="div">
-            新增禁止詞語
+            {t('AddForbiddenWord')}
           </Typography>
 
           <div className="flex-1" />
@@ -552,7 +566,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
             <TextField
               className="flex-1"
               name={`${item}_${index}_name`}
-              label="禁語"
+              label={t('ForbiddenWord')}
               variant="outlined"
               value={item}
               onChange={(e) => changeForbidContent(index, e.target.value)}
@@ -588,7 +602,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
             size="small"
             onClick={() => formik.handleSubmit()}
           >
-            {service ? '確認修改' : '確認新增'}
+            {service ? t('ConfirmModify') : t('ConfirmAdd')}
             <CheckIcon />
           </Fab>
         </div>

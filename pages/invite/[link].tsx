@@ -5,6 +5,7 @@ import { PrismaClient, Prisma } from '@prisma/client';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import TextField from '@mui/material/TextField';
 import * as antd from 'antd';
+import { useTranslation } from 'react-i18next';
 
 import { prisma } from '../../database/db';
 import { auth } from '../../firebase/firebaseClient';
@@ -15,6 +16,7 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
   const appCtx = React.useContext(AppContext);
   const router = useRouter();
   const [authUser, loading] = useAuthState(auth);
+  const { t } = useTranslation();
 
   const [state, setState] = React.useState<'loginJoin' | ''>('');
   const [serviceName, setServiceName] = React.useState<string>('');
@@ -45,7 +47,7 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
 
   const loginJoin = async () => {
     if (!displayName) {
-      setErrorDisplayName('請輸入名稱');
+      setErrorDisplayName(t('NameRequired'));
     } else {
       setErrorDisplayName('');
       await appCtx.login();
@@ -65,7 +67,7 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
       {serviceName && (
         <div className="grid gird-cols-1  h-screen ">
           <div className="flex items-end justify-center">
-            <p className="font-bold text-3xl">{`您已獲邀加入${serviceName}`}</p>
+            <p className="font-bold text-3xl">{t('InviteTo') + serviceName}</p>
           </div>
           <div>
             <div className="flex justify-center mb-2">
@@ -73,7 +75,7 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
                 error={!!errorDisplayName}
                 helperText={errorDisplayName}
                 onChange={(e) => setDisplayName(e.target.value)}
-                label="幫自己取個帥氣的名字吧"
+                label={t('NameYourself')}
                 variant="outlined"
               />
             </div>

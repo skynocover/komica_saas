@@ -12,13 +12,13 @@ const Notification = {
 
     if (type === 'success') {
       antd.notification.success({
-        message: '成功',
+        message: 'success',
         description: msg,
         duration: 1.5,
       });
     } else if (type === 'error') {
       antd.notification.error({
-        message: '錯誤',
+        message: 'error',
         description: msg,
         duration: 1.5,
       });

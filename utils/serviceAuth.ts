@@ -23,16 +23,3 @@ export interface ServiceAuthCheck {
   report: boolean;
   del: boolean;
 }
-
-export const authText = (input: auth): string => {
-  switch (input) {
-    case 'moderator':
-      return '僅版主';
-    case 'invited':
-      return '僅成員';
-    case 'registered':
-      return '僅已註冊';
-    default:
-      return '允許匿名';
-  }
-};

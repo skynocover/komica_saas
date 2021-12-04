@@ -15,7 +15,7 @@ export const Pages = ({ page, pageCount }: { page: number; pageCount: number }) 
         shape="rounded"
         color="primary"
         page={page}
-        onChange={(event, value) => router.push(`/?page=${value}`)}
+        onChange={(event, value) => router.push(`${router.asPath.split('?')[0]}?page=${value}`)}
       />
     </div>
   );

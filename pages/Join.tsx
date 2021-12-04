@@ -13,6 +13,7 @@ import { Notification } from '../components/Notification';
 import { prisma } from '../database/db';
 import { AppContext } from '../components/AppContext';
 import { DangerButton } from '../components/DangerButton';
+import { useTranslation } from 'react-i18next';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { Pages } from '../components/Pagination';
@@ -34,6 +35,8 @@ const pageSize = 10;
 export default function Index() {
   const appCtx = React.useContext(AppContext);
   const router = useRouter();
+
+  const { t } = useTranslation();
 
   const [dataSource, setDataSource] = React.useState<any[]>([]);
   const [count, setCount] = React.useState<number>(0);
@@ -75,18 +78,18 @@ export default function Index() {
 
   const columns: ColumnsType<any> = [
     {
-      title: '討論版',
+      title: t('Board'),
       align: 'center',
       fixed: 'left',
       render: (item) => <>{item.Service.name}</>,
     },
     {
-      title: '顯示名稱',
+      title: t('DisplayName'),
       align: 'center',
       dataIndex: 'displayName',
     },
     {
-      title: '加入時間',
+      title: t('JoinTime'),
       align: 'center',
       render: (item) => <>{dayjs(item.createdAt).format('YYYY-MM-DDTHH:mm')}</>,
     },
@@ -105,7 +108,7 @@ export default function Index() {
             )
           }
         >
-          修改顯示名稱
+          {t('ModifyDisplayName')}
         </antd.Button>
       ),
     },
@@ -113,7 +116,7 @@ export default function Index() {
       align: 'center',
       render: (item) => (
         <antd.Button type="primary" href={`/service/${item.Service.id}`} target="_blank">
-          前往版面
+          {t('Goto')}
         </antd.Button>
       ),
     },
@@ -124,8 +127,8 @@ export default function Index() {
           <div></div>
         ) : (
           <DangerButton
-            title="離開版面"
-            message={'確定離開版面?'}
+            title={t('LeaveBoard')}
+            message={t('ConfirmLeave') + '?'}
             onClick={() => leaveGroup(item.id)}
           />
         );
@@ -138,10 +141,10 @@ export default function Index() {
       <div className="flex space-x-4 my-3 ">
         <div>
           <antd.Input
-            addonBefore="搜尋版面"
+            addonBefore={t('SearchBoard')}
             onChange={(e) => setServiceName(e.target.value)}
             allowClear
-            placeholder={`請輸入版面名稱`}
+            placeholder={t('PleaseInputBoardName')}
           />
         </div>
       </div>
@@ -159,5 +162,5 @@ export default function Index() {
     </antd.Spin>
   );
 
-  return <MainPage title="Join" content={content} />;
+  return <MainPage title={t('JoinedBoard')} content={content} />;
 }

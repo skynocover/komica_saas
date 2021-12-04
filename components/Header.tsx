@@ -4,14 +4,20 @@ import { useRouter } from 'next/router';
 import Popover from '@mui/material/Popover';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
-
+import Select from 'react-select';
+import i18n from 'i18next';
+import { useTranslation } from 'react-i18next';
 import * as antd from 'antd';
+import Cookies from 'universal-cookie';
 
 import { AppContext } from './AppContext';
+
+const cookies = new Cookies();
 
 export const Header = ({ title }: { title?: string }) => {
   const router = useRouter();
   const appCtx = React.useContext(AppContext);
+  const { t } = useTranslation();
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
@@ -29,7 +35,7 @@ export const Header = ({ title }: { title?: string }) => {
         <p className="text-lg font-semibold">{appCtx.auth.currentUser?.displayName}</p>
         <div className="mt-5">
           <a href="#" className="border rounded-full py-2 px-4 text-xs font-semibold text-gray-700">
-            Manage your Account
+            {t('ManageAccount')}
           </a>
         </div>
       </div>
@@ -50,8 +56,12 @@ export const Header = ({ title }: { title?: string }) => {
               </svg>
             </div>
             <div className="pl-3">
-              <p className="text-sm font-medium text-gray-800 leading-none">管理討論版</p>
-              <p className="text-xs text-gray-500">管理版面 &amp; 成員</p>
+              <p className="text-sm font-medium text-gray-800 leading-none">
+                {t('Manage') + t('Board')}
+              </p>
+              <p className="text-xs text-gray-500">
+                {t('Manage') + t('Board') + ' & ' + t('Member')}
+              </p>
             </div>
           </a>
         </Link>
@@ -73,8 +83,8 @@ export const Header = ({ title }: { title?: string }) => {
               </svg>
             </div>
             <div className="pl-3">
-              <p className="text-sm font-medium text-gray-800 leading-none">管理加入的版面</p>
-              <p className="text-xs text-gray-500">修改名稱 &amp; 離開版面 </p>
+              <p className="text-sm font-medium text-gray-800 leading-none">{t('JoinedBoard')}</p>
+              <p className="text-xs text-gray-500">{t('ChangeNameLeaveBoard')}</p>
             </div>
           </a>
         </Link>
@@ -125,12 +135,18 @@ export const Header = ({ title }: { title?: string }) => {
         {/* <a href="#" className="px-4 py-2 pb-4 hover:bg-gray-100 flex">
           <p className="text-sm font-medium text-gray-800 leading-none">Support FAQ</p>
         </a> */}
+
         <a className="px-4 py-2 pb-4 hover:bg-gray-100 flex" onClick={appCtx.logout}>
           <p className="text-sm font-medium text-gray-800 leading-none">Logout</p>
         </a>
       </div>
     </div>
   );
+
+  const handleChange = (e: any) => {
+    i18n.changeLanguage(e.target.value);
+    cookies.set('AkraftLanguage', e.target.value);
+  };
 
   return (
     <>
@@ -152,8 +168,31 @@ export const Header = ({ title }: { title?: string }) => {
           </a>
 
           <div className="lg:w-2/5 inline-flex lg:justify-end ml-5 lg:ml-0">
+            <>
+              <div className="relative inline-flex">
+                <svg
+                  className="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 412 232"
+                >
+                  <path
+                    d="M206 171.144L42.678 7.822c-9.763-9.763-25.592-9.763-35.355 0-9.763 9.764-9.763 25.592 0 35.355l181 181c4.88 4.882 11.279 7.323 17.677 7.323s12.796-2.441 17.678-7.322l181-181c9.763-9.764 9.763-25.592 0-35.355-9.763-9.763-25.592-9.763-35.355 0L206 171.144z"
+                    fill="#648299"
+                    fill-rule="nonzero"
+                  />
+                </svg>
+                <select
+                  onChange={(e) => handleChange(e)}
+                  value={i18n.language}
+                  className="border  rounded-full text-gray-600 h-10 pl-5 pr-10 bg-gray-900  focus:outline-none appearance-none"
+                >
+                  <option value="zh_TW">Chinese</option>
+                  <option value="en">English</option>
+                </select>
+              </div>
+            </>
             {appCtx.auth.currentUser ? (
-              <>
+              <div className="flex items-center">
                 <antd.Button
                   aria-describedby={id}
                   type="link"
@@ -178,11 +217,11 @@ export const Header = ({ title }: { title?: string }) => {
                 >
                   <UserMenu />
                 </Popover>
-              </>
+              </div>
             ) : (
               <Link href="/Login">
                 <a className="bg-indigo-700 hover:bg-indigo-500 text-white ml-4 py-2 px-3 rounded-lg">
-                  Login
+                  {t('Login')}
                 </a>
               </Link>
             )}

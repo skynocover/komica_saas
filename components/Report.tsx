@@ -1,10 +1,6 @@
 import React from 'react';
 import { GetServerSideProps, GetStaticProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import { Divider, LinkTypeMap } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Typography from '@material-ui/core/Typography';
 import dayjs from 'dayjs';
 import * as antd from 'antd';
 import { ColumnsType } from 'antd/lib/table';
@@ -13,14 +9,8 @@ import { Notification } from './Notification';
 import { prisma } from '../database/db';
 import { AppContext } from './AppContext';
 import { DangerButton } from './DangerButton';
+import { useTranslation } from 'react-i18next';
 
-import { makeStyles } from '@material-ui/core/styles';
-import { Pages } from './Pagination';
-import { ListThreads } from './ListThread';
-import { ReportForm } from './ReportForm';
-import { PostForm } from './PostForm';
-import { Thread, Reply } from '.prisma/client';
-import { MainPage } from './MainPage';
 import { auth } from '../firebase/firebaseClient';
 
 import utc from 'dayjs/plugin/utc';
@@ -54,6 +44,7 @@ interface reply {
 export const Report = ({ setSpin }: { setSpin: any }) => {
   const appCtx = React.useContext(AppContext);
   const router = useRouter();
+  const { t } = useTranslation();
 
   const [dataSource, setDataSource] = React.useState<any[]>([]);
   const [count, setCount] = React.useState<number>(0);
@@ -109,28 +100,28 @@ export const Report = ({ setSpin }: { setSpin: any }) => {
 
   const columns: ColumnsType<report> = [
     {
-      title: '討論版',
+      title: t('Board'),
       align: 'center',
       fixed: 'left',
       render: (item) => <>{item.Service.name}</>,
     },
     {
-      title: '回報原因',
+      title: t('ReportReason'),
       align: 'center',
       render: (item) =>
         item.reason === 'del' ? (
-          <antd.Tag color="cyan">刪文請求</antd.Tag>
+          <antd.Tag color="cyan">{t('DeleteRequest')}</antd.Tag>
         ) : (
-          <antd.Tag color="magenta">引戰</antd.Tag>
+          <antd.Tag color="magenta">{t('HateSpeech')}</antd.Tag>
         ),
     },
     {
-      title: '回報內容',
+      title: t('ReportContent'),
       align: 'center',
       dataIndex: 'content',
     },
     {
-      title: '回報時間',
+      title: t('ReportTime'),
       align: 'center',
       render: (item) => <>{dayjs(item.createdAt).format('YYYY-MM-DDTHH:mm')}</>,
     },
@@ -138,7 +129,7 @@ export const Report = ({ setSpin }: { setSpin: any }) => {
       align: 'center',
       render: (item) => (
         <antd.Button type="primary" href={getLink(item)} target="_blank">
-          前往此文
+          {t('Goto')}
         </antd.Button>
       ),
     },
@@ -146,8 +137,8 @@ export const Report = ({ setSpin }: { setSpin: any }) => {
       align: 'center',
       render: (item) => (
         <DangerButton
-          title={item.Thread ? '刪除討論串' : '刪除回覆'}
-          message={'確認刪除?'}
+          title={item.Thread ? t('Delete') + t('Thread') : t('Delete') + t('Reply')}
+          message={t('Confirm') + t('Delete') + '?'}
           onClick={() =>
             item.Thread
               ? delThread(item.Thread.id, item.Service.id, item.id)
@@ -160,8 +151,8 @@ export const Report = ({ setSpin }: { setSpin: any }) => {
       align: 'center',
       render: (item) => (
         <DangerButton
-          title="刪除回報紀錄"
-          message={'確認刪除?'}
+          title={t('DeleteReportRecord')}
+          message={t('Confirm') + t('Delete') + '?'}
           onClick={() => delReport(item.id, item.Service.id)}
         />
       ),

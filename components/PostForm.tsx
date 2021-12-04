@@ -2,13 +2,16 @@ import React, { useContext } from 'react';
 import { makeStyles, styled } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
 import Checkbox from '@material-ui/core/Checkbox';
-import NavigationIcon from '@material-ui/icons/Navigation';
+import SendIcon from '@mui/icons-material/Send';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
 import { Formik, useField, useFormik } from 'formik';
 import Button from '@material-ui/core/Button';
 import { useRouter } from 'next/router';
 import Tooltip from '@mui/material/Tooltip';
+import { useTranslation } from 'react-i18next';
+import IconButton from '@mui/material/IconButton';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 
 import { AppContext, thread } from './AppContext';
 import { isYoutubeURL, getYoutubeId } from '../utils/regex';
@@ -45,6 +48,7 @@ export const PostForm = ({
   const appCtx = useContext(AppContext);
   const classes = useStyles();
   const router = useRouter();
+  const { t } = useTranslation();
 
   const formik = useFormik<FormProps>({
     initialValues: {
@@ -58,13 +62,14 @@ export const PostForm = ({
     validateOnChange: false,
     validate: (values) => {
       let errors: any = {};
-      if (!parentId && !values.title) errors.title = '標題必填';
-      if (!values.content && !values.image) errors.content = '內文及圖片必須至少有其中一個';
-      if (values.image && values.youtubeURL) errors.youtubeURL = 'youtube連結及圖片只能擇一';
-      if (values.image && values.image.size > 2048 * 1000) errors.image = '圖檔限制為2MB';
+      if (!parentId && !values.title) errors.title = t('TitleRequired');
+      if (!values.content && !values.image && !values.youtubeURL)
+        errors.content = t('ContentRequired');
+      if (values.image && values.youtubeURL) errors.youtubeURL = t('ContentMultiple');
+      if (values.image && values.image.size > 2048 * 1000) errors.image = t('ImageLimit');
 
       if (values.youtubeURL && !isYoutubeURL(values.youtubeURL))
-        errors.youtubeURL = 'youtube連結格式錯誤';
+        errors.youtubeURL = t('LinkFormatError');
 
       return errors;
     },
@@ -85,7 +90,7 @@ export const PostForm = ({
 
         if (data) {
           appCtx.setDrawOpen(false);
-          appCtx.sanckBar('回覆成功', 'success');
+          appCtx.sanckBar(t('Reply') + t('Success'), 'success');
           formik.resetForm();
           router.reload();
         }
@@ -100,7 +105,7 @@ export const PostForm = ({
         });
 
         if (data) {
-          appCtx.sanckBar('發文成功', 'success');
+          appCtx.sanckBar(t('Post') + t('Success'), 'success');
           router.reload();
         }
       }
@@ -118,7 +123,7 @@ export const PostForm = ({
             error={formik.errors.title ? true : false}
             helperText={formik.errors.title}
             name="title"
-            label="標題"
+            label={t('Title')}
             variant="filled"
             value={formik.values.title}
             onChange={formik.handleChange}
@@ -128,7 +133,7 @@ export const PostForm = ({
         <TextField
           name="name"
           disabled={!!displayName}
-          label="名稱"
+          label={t('Name')}
           variant="filled"
           value={formik.values.name}
           onChange={formik.handleChange}
@@ -140,22 +145,22 @@ export const PostForm = ({
           onChange={formik.handleChange}
           multiline
           rows={4}
-          label="內文"
+          label={t('Content')}
           variant="filled"
           value={formik.values.content}
-          placeholder="可使用markdown語法"
+          placeholder={t('MarkdownUsable')}
         />
         <TextField
           error={formik.errors.youtubeURL ? true : false}
           helperText={formik.errors.youtubeURL}
           name="youtubeURL"
-          label="youtube連結"
+          label={t('YoutubeLink')}
           variant="filled"
           value={formik.values.youtubeURL}
           onChange={formik.handleChange}
         />
 
-        <div className="flex items-center">
+        <div className="flex items-center mt-1">
           <input
             accept="image/*"
             style={{ display: 'none' }}
@@ -168,26 +173,15 @@ export const PostForm = ({
           />
           <label htmlFor={id} className="justify-center">
             <Button variant="contained" component="span">
-              Upload
+              <FileUploadIcon />
             </Button>
           </label>
 
           <div className="flex-1">{formik.values.image?.name}</div>
           {<span className="text-red-600"> {formik.errors.image}</span>}
-          <Fab
-            variant="extended"
-            color="primary"
-            aria-label="add"
-            className={classes.margin}
-            size="small"
-            onClick={() => formik.handleSubmit()}
-          >
-            {parentId ? '回文' : '發文'}
-            <NavigationIcon className={classes.extendedIcon} />
-          </Fab>
 
           {parentId && (
-            <Tooltip title="勾選將不會推文">
+            <Tooltip title={t('CheckIfTweetLess') || 'title'}>
               <FormControlLabel
                 value="sage"
                 control={
@@ -198,6 +192,10 @@ export const PostForm = ({
               />
             </Tooltip>
           )}
+
+          <Button variant="contained" color="primary" onClick={() => formik.handleSubmit()}>
+            <SendIcon />
+          </Button>
         </div>
       </div>
     </div>

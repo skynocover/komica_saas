@@ -15,6 +15,7 @@ import ReactMarkdown from 'react-markdown';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import * as antd from 'antd';
+import { useTranslation } from 'react-i18next';
 
 import { ReportForm } from './ReportForm';
 import { PostForm } from './PostForm';
@@ -38,6 +39,7 @@ export const ListThreads = ({
 }) => {
   const appCtx = useContext(AppContext);
   const router = useRouter();
+  const { t } = useTranslation();
 
   const ThreadLabel = ({ post }: { post: any }) => {
     const appCtx = useContext(AppContext);
@@ -50,11 +52,11 @@ export const ListThreads = ({
 
     const deletePost = () => {
       antd.Modal.confirm({
-        title: '確認',
+        title: t('Confirm'),
         icon: <i />,
-        content: post.title ? '確認刪除討論串?' : '確認刪除回應?',
-        okText: '確認',
-        cancelText: '取消',
+        content: post.title ? t('ConfirmDeleteThread') + '?' : t('ConfirmDeleteReply') + '?',
+        okText: t('Confirm'),
+        cancelText: t('Cancel'),
         onOk: async () => {
           let data: any;
           if (post.title) {
@@ -64,17 +66,6 @@ export const ListThreads = ({
           }
           if (data) router.reload();
         },
-      });
-    };
-
-    const topPost = () => {
-      antd.Modal.confirm({
-        title: '確認',
-        icon: <i />,
-        content: '確認置頂此文?',
-        okText: '確認',
-        cancelText: '取消',
-        onOk: () => {},
       });
     };
 
@@ -112,12 +103,6 @@ export const ListThreads = ({
             </IconButton>
           )
         )}
-
-        {/* {post.title && (
-          <IconButton size="small" onClick={() => topPost()}>
-            <DoneAllIcon />
-          </IconButton>
-        )} */}
 
         {post.title && auth.reply && (
           <IconButton
@@ -191,7 +176,7 @@ export const ListThreads = ({
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
-                <Typography>被隱藏的回應</Typography>
+                <Typography>{t('HiddenReply')}</Typography>
               </AccordionSummary>
 
               <AccordionDetails className="flex justify-center">

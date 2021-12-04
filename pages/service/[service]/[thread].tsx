@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { PrismaClient, Prisma } from '@prisma/client';
 import * as antd from 'antd';
+import { useTranslation } from 'react-i18next';
 
 import { prisma } from '../../../database/db';
 import { AppContext } from '../../../components/AppContext';
@@ -29,6 +30,7 @@ export default function Index({
   const appCtx = React.useContext(AppContext);
   const router = useRouter();
   const [authUser, loading] = useAuthState(auth);
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     console.log(threads);
@@ -52,7 +54,7 @@ export default function Index({
         <>
           <div className="grid gird-cols-1  h-screen ">
             <div className="flex items-end justify-center">
-              <p className="font-bold text-3xl">此版面需要登入才能進入</p>
+              <p className="font-bold text-3xl">{t('BoardLoginRequired')}</p>
             </div>
             <div>
               <div className="flex justify-center">
@@ -65,7 +67,7 @@ export default function Index({
         </>
       );
     } else if (error === 'invited') {
-      return <>此版面需要通過邀請連結加入</>;
+      return <>{t('BoardInvitedRequired')}</>;
     }
     return <>{error}</>;
   }
@@ -130,7 +132,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
       if (serviceAuth.visible === 'registered') {
         return { props: { error: 'registered' } };
       }
-      return { props: { error: '無權限進入' } };
+      return { props: { error: 'Auth required' } };
     }
 
     const threads = [

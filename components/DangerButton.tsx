@@ -1,5 +1,6 @@
 import React from 'react';
 import * as antd from 'antd';
+import { useTranslation } from 'react-i18next';
 
 interface DangerButtonProps {
   title: string;
@@ -9,13 +10,15 @@ interface DangerButtonProps {
 }
 
 const DangerButton = ({ title, message, onClick, disabled }: DangerButtonProps) => {
+  const { t } = useTranslation();
+
   const showDialog = () => {
     antd.Modal.confirm({
-      title: '確認',
+      title: t('Confirm'),
       icon: <i />,
       content: message,
-      okText: '確認',
-      cancelText: '取消',
+      okText: t('Confirm'),
+      cancelText: t('Cancel'),
       onOk: onClick,
     });
   };

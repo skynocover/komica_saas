@@ -3,7 +3,8 @@ import axios from 'axios';
 import * as antd from 'antd';
 import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged, Auth, User } from 'firebase/auth';
 import { useRouter } from 'next/router';
-
+import i18n from 'i18next';
+import Cookies from 'universal-cookie';
 import Drawer from '@material-ui/core/Drawer';
 import { makeStyles } from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -15,6 +16,8 @@ import firebase from 'firebase/compat/app';
 import { auth } from '../firebase/firebaseClient';
 import { Notification } from '../components/Notification';
 import { useAuthState } from 'react-firebase-hooks/auth';
+
+const cookies = new Cookies();
 
 export interface thread {
   id?: string;
@@ -48,6 +51,9 @@ export interface report {
 }
 
 interface AppContextProps {
+  language: string;
+  setLanguage: React.Dispatch<React.SetStateAction<string>>;
+
   fetch: (
     method: 'get' | 'post' | 'put' | 'delete' | 'patch',
     url: string,
@@ -75,6 +81,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
   const router = useRouter();
 
   const [authUser, loading, error] = useAuthState(auth);
+  const [language, setLanguage] = React.useState<string>('zh_TW');
 
   // modal
   const [modal, setmodal] = React.useState<any>(null);
@@ -121,6 +128,8 @@ const AppProvider = ({ children }: AppProviderProps) => {
   React.useEffect(() => {
     axios.defaults.baseURL = '';
     axios.defaults.headers.common['Content-Type'] = 'application/json';
+    const lng = cookies.get('AkraftLanguage');
+    i18n.changeLanguage(lng || 'en');
   }, []);
 
   const fetch = async (
@@ -177,6 +186,9 @@ const AppProvider = ({ children }: AppProviderProps) => {
   return (
     <AppContext.Provider
       value={{
+        language,
+        setLanguage,
+
         fetch,
 
         auth,

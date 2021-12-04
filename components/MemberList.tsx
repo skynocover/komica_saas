@@ -15,6 +15,7 @@ import ReportIcon from '@mui/icons-material/Report';
 import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged, Auth, User } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
+import { useTranslation } from 'react-i18next';
 
 import { AppContext, thread } from './AppContext';
 import { DangerButton } from './DangerButton';
@@ -27,6 +28,7 @@ interface Member {
 export const MemberList = ({ serviceId }: { serviceId: string }) => {
   const appCtx = React.useContext(AppContext);
   const router = useRouter();
+  const { t } = useTranslation();
 
   const [loading, setLoading] = React.useState<boolean>(true);
 
@@ -50,19 +52,23 @@ export const MemberList = ({ serviceId }: { serviceId: string }) => {
 
   const columns: ColumnsType<Member> = [
     {
-      title: '名稱',
+      title: t('DisplayName'),
       align: 'center',
       render: (item) => <>{item.displayName}</>,
     },
     {
-      title: '加入時間',
+      title: t('JoinTime'),
       align: 'center',
       render: (item) => <>{dayjs(item.createdAt).format('YYYY-MM-DD HH:mm')}</>,
     },
     {
       align: 'center',
       render: (item) => (
-        <DangerButton title="移除用戶" message={'移除用戶'} onClick={() => removeMember(item.id)} />
+        <DangerButton
+          title={t('Remove') + t('Member')}
+          message={t('Remove') + t('Member')}
+          onClick={() => removeMember(item.id)}
+        />
       ),
     },
   ];

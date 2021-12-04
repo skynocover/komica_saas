@@ -17,6 +17,7 @@ import * as antd from 'antd';
 import { prisma } from '../../database/db';
 import { auth } from '../../firebase/firebaseClient';
 import { checkUserAndGroup, checkAuth } from '../../utils/checkServiceAuth';
+import { useTranslation } from 'react-i18next';
 
 import { Notification } from '../../components/Notification';
 import { AppContext } from '../../components/AppContext';
@@ -39,14 +40,12 @@ export default function Index({
   const router = useRouter();
   const [authUser, loading] = useAuthState(auth);
 
+  const { t } = useTranslation();
+
   const page = router.query.page ? +router.query.page : 1;
   const pageCount = Math.ceil(count / pageSize);
 
-  React.useEffect(() => {
-    console.log(service);
-    console.log(checkauth);
-    console.log(error);
-  }, []);
+  React.useEffect(() => {}, []);
 
   const Discription = () => (
     <div className="flex justify-center">
@@ -73,7 +72,7 @@ export default function Index({
         <>
           <div className="grid gird-cols-1  h-screen ">
             <div className="flex items-end justify-center">
-              <p className="font-bold text-3xl">此版面需要登入才能進入</p>
+              <p className="font-bold text-3xl">{t('BoardLoginRequired')}</p>
             </div>
             <div>
               <div className="flex justify-center">
@@ -86,7 +85,7 @@ export default function Index({
         </>
       );
     } else if (error === 'invited') {
-      return <>此版面需要通過邀請連結加入</>;
+      return <>{t('BoardInvitedRequired')}</>;
     }
     return <>{error}</>;
   }
@@ -158,7 +157,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
       if (serviceAuth.visible === 'registered') {
         return { props: { error: 'registered' } };
       }
-      return { props: { error: '無權限進入' } };
+      return { props: { error: 'Auth required' } };
     }
 
     // 整理thread
