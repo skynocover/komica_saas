@@ -10,7 +10,6 @@ import 'antd/dist/antd.css';
 import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase/firebaseClient';
-import { appWithTranslation } from 'next-i18next';
 import { useTranslation, initReactI18next } from 'react-i18next';
 import i18n from 'i18next';
 import { en, zh_TW } from '../locales';
@@ -47,4 +46,4 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   );
 };
 
-export default appWithTranslation(MyApp);
+export default MyApp;
