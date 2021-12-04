@@ -1,6 +1,4 @@
 import * as admin from 'firebase-admin';
-import path from 'path';
-import { initializeApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 
 const _serviceAccount: admin.ServiceAccount = {
@@ -10,7 +8,9 @@ const _serviceAccount: admin.ServiceAccount = {
 };
 
 if (!admin.apps.length) {
-  initializeApp(_serviceAccount);
+  admin.initializeApp({
+    credential: admin.credential.cert(_serviceAccount),
+  });
 }
 
 const auth = getAuth();

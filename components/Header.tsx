@@ -34,9 +34,14 @@ export const Header = ({ title }: { title?: string }) => {
       <div className="text-center p-6  border-b">
         <p className="text-lg font-semibold">{appCtx.auth.currentUser?.displayName}</p>
         <div className="mt-5">
-          <a href="#" className="border rounded-full py-2 px-4 text-xs font-semibold text-gray-700">
-            {t('ManageAccount')}
-          </a>
+          <Link href="/Setting">
+            <a
+              target="_blank"
+              className="border rounded-full py-2 px-4 text-xs font-semibold text-gray-700"
+            >
+              {t('ManageAccount')}
+            </a>
+          </Link>
         </div>
       </div>
       <div className="border-b">
