@@ -99,7 +99,9 @@ export const BottomLink = ({ service }: { service: service }) => {
   return (
     <div className="flex justify-center">
       <ButtonGroup variant="text" color="primary" aria-label="text primary button group">
-        <Button href="https://komica-saas.vercel.app" target="_blank"></Button>
+        <Button href="https://komica-saas.vercel.app" target="_blank">
+          Build by Akraft
+        </Button>
         <Button onClick={() => router.push(`/service/${service.id}`)}>{t('BackToHomepage')}</Button>
       </ButtonGroup>
     </div>
