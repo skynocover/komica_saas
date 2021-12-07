@@ -68,7 +68,7 @@ export default function Index({
         flex items-center justify-center"
       >
         <div className="w-full h-100">
-          <h1 className="text-xl md:text-2xl font-bold leading-tight mt-12">Kraft</h1>
+          <h1 className="text-xl md:text-2xl font-bold leading-tight mt-12">Akraft</h1>
 
           <div className="mt-6">
             <button

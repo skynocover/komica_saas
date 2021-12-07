@@ -27,7 +27,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       const threads = await prisma.thread.findMany({
         take: 12,
         orderBy: { replyAt: 'desc' },
-        where: { serviceId: { in: serviceIds } },
+        where: { serviceId: { in: serviceIds }, deletedAt: null },
         select: {
           id: true,
           title: true,
