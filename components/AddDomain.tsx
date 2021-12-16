@@ -68,7 +68,9 @@ export const AddDomain = ({
       >
         <antd.Select style={{ width: 120 }} onChange={() => {}}>
           {services?.map((item: any) => (
-            <antd.Select.Option value={item.id}>{item.name}</antd.Select.Option>
+            <antd.Select.Option key={item.id} value={item.id}>
+              {item.name}
+            </antd.Select.Option>
           ))}
         </antd.Select>
       </antd.Form.Item>

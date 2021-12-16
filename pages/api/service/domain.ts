@@ -71,6 +71,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         return;
       }
 
+      if (domainName === 'www') {
+        res.json(Resp.domainDuplicate);
+        return;
+      }
+
       const service = await prisma.service.findFirst({
         where: {
           id: serviceId,
