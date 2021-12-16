@@ -14,6 +14,7 @@ import utc from 'dayjs/plugin/utc';
 import ReportIcon from '@mui/icons-material/Report';
 import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged, Auth, User } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { Domains } from '../components/Domains';
 import { useTranslation, initReactI18next } from 'react-i18next';
 
 import { Notification } from '../components/Notification';
@@ -180,12 +181,15 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
   );
 
   const content = (
-    <antd.Tabs defaultActiveKey="1">
+    <antd.Tabs defaultActiveKey="3">
       <antd.Tabs.TabPane tab={t('CreatedBoard')} key="1">
         {Services}
       </antd.Tabs.TabPane>
       <antd.Tabs.TabPane tab={t('ReportBoard')} key="2">
         <Report setSpin={setSpin} />
+      </antd.Tabs.TabPane>
+      <antd.Tabs.TabPane tab={t('Domain')} key="3">
+        <Domains setSpin={setSpin} />
       </antd.Tabs.TabPane>
     </antd.Tabs>
   );

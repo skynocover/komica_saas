@@ -14,59 +14,57 @@ export const Resp = {
   // Api Fail
   paramInputEmpty: {
     errorCode: 1000,
-    errorMessage: 'param Input Empty',
+    errorMessage: 'param_input_empty',
   },
 
   paramInputFormateError: {
     errorCode: 1001,
-    errorMessage: 'param Input formate error',
+    errorMessage: 'param_input_format_error',
   },
 
   queryNotFound: {
     errorCode: 1002,
-    errorMessage: 'param Input not found',
+    errorMessage: 'query_not_found',
   },
 
-  postLimit: {
-    errorCode: 1003,
-    errorMessage: postLimit,
-  },
+  // postLimit: {
+  //   errorCode: 1003,
+  //   errorMessage: postLimit,
+  // },
 
   imgLimit: {
     errorCode: 1004,
-    errorMessage: '圖檔上傳過大',
+    errorMessage: 'image_too_large',
   },
 
   userPermissionDenied: {
     errorCode: 1005,
-    errorMessage: '用戶權限不足',
+    errorMessage: 'insufficient_user_rights',
   },
 
   contentForbidden: {
     errorCode: 1006,
-    errorMessage: '發文內容含有禁止內容',
+    errorMessage: 'post_contains_prohibited_content',
+  },
+
+  domainDuplicate: {
+    errorCode: 1007,
+    errorMessage: 'domain_already_used',
+  },
+
+  domainReachUpLimit: {
+    errorCode: 1008,
+    errorMessage: 'domain_reached_upper_limi',
   },
 
   // DB Fail
-  sqlExecFail: {
+  systemError: {
     errorCode: 2000,
-    errorMessage: 'sql exec fail',
+    errorMessage: 'system_error',
   },
   // User not found
   userNotFound: {
     errorCode: 2001,
-    errorMessage: 'user not found',
-  },
-
-  // Exec Fail
-  commandExecFail: {
-    errorCode: 3000,
-    errorMessage: 'command exec fail',
-  },
-
-  // Exec Fail
-  userNotExist: {
-    errorCode: 3001,
-    errorMessage: 'firebase user not found',
+    errorMessage: 'user_not_found',
   },
 };

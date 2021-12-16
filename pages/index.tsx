@@ -171,6 +171,29 @@ export default function Index({
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res, query }) => {
   try {
+    if (req.headers.host) {
+      const host = req.headers.host.split('.');
+      // const host = ['admintest', '', ''];
+
+      if (host.length > 2) {
+        const subdomain = host[0];
+        const domain = await prisma.domain.findFirst({
+          where: { name: subdomain },
+          select: { Service: true },
+        });
+
+        if (domain) {
+          return {
+            redirect: {
+              permanent: false,
+              destination: process.env.NEXT_PUBLIC_DOMAIN! + '/service/' + domain.Service.id,
+            },
+            props: {},
+          };
+        }
+      }
+    }
+
     const exThreads = await prisma.thread.findMany({
       take: 12,
       orderBy: { replyAt: 'desc' },

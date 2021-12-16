@@ -10,7 +10,8 @@
     "lint": "next lint",
     "studio": "prisma studio",
     "generate": "prisma generate",
-    "seed": "prisma db seed"
+    "seed": "prisma db seed",
+    "translate": "i18ncreate"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
@@ -26,6 +27,7 @@
     "@prisma/client": "^3.2.1",
     "antd": "^4.16.12",
     "axios": "^0.21.1",
+    "cf_dns_sdk": "https://github.com/skynocover/CF_DNS_SDK.git",
     "cookies": "^0.8.0",
     "crypto-js": "^4.1.1",
     "dayjs": "^1.10.7",
@@ -45,7 +47,9 @@
     "react-select": "^5.2.1",
     "react-simple-image-viewer": "^1.1.1",
     "request-ip": "^2.1.3",
-    "universal-cookie": "^4.0.4"
+    "swr": "^1.1.1",
+    "universal-cookie": "^4.0.4",
+    "vercel_domains_sdk": "https://github.com/skynocover/Vercel_Domains_SDK.git"
   },
   "devDependencies": {
     "@types/cookies": "^0.7.7",
@@ -57,6 +61,7 @@
     "autoprefixer": "^10.4.0",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.0",
+    "i18n_airtable": "https://github.com/skynocover/i18n_airtable.git",
     "postcss": "^8.3.11",
     "prisma": "^3.2.1",
     "tailwindcss": "^2.2.19",

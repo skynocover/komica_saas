@@ -12,15 +12,12 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase/firebaseClient';
 import { useTranslation, initReactI18next } from 'react-i18next';
 import i18n from 'i18next';
-import { en, zh_TW } from '../locales';
+import i18nconfig from '../locales/config.json';
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
-    resources: {
-      en: { translation: en },
-      zh_TW: { translation: zh_TW },
-    },
+    resources: i18nconfig,
     fallbackLng: 'en',
     interpolation: {
       escapeValue: false, // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape

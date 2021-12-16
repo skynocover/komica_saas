@@ -31,7 +31,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       res.json({ ...Resp.success, members });
     } catch (error: any) {
       console.log(error.message);
-      res.json({ error: error.message, ...Resp.sqlExecFail });
+      res.json({ error: error.message, ...Resp.systemError });
     }
   }
   // 為服務添加人員 (使用invate link)
@@ -87,7 +87,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       res.json(Resp.success);
     } catch (error: any) {
       console.log(error.message);
-      res.json({ error: error.message, ...Resp.sqlExecFail });
+      res.json({ error: error.message, ...Resp.systemError });
     }
   }
 
@@ -112,7 +112,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       res.json(Resp.success);
     } catch (error: any) {
       console.log(error.message);
-      res.json({ error: error.message, ...Resp.sqlExecFail });
+      res.json({ error: error.message, ...Resp.systemError });
     }
   }
 

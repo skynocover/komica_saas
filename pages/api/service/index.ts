@@ -55,7 +55,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       }
     } catch (error: any) {
       console.log(error.message);
-      res.json({ error: error.message, ...Resp.sqlExecFail });
+      res.json({ error: error.message, ...Resp.systemError });
     }
   }
   async function postService() {
@@ -64,7 +64,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
       const user = await prisma.user.findFirst({ where: { account: decodeToken.uid } });
       if (!user) {
-        res.json(Resp.userNotExist);
+        res.json(Resp.userNotFound);
         return;
       }
 
@@ -124,7 +124,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       res.json(Resp.success);
     } catch (error: any) {
       console.log(error.message);
-      res.json({ error: error.message, ...Resp.sqlExecFail });
+      res.json({ error: error.message, ...Resp.systemError });
     }
   }
 
@@ -135,7 +135,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
       const user = await prisma.user.findFirst({ where: { account: decodeToken.uid } });
       if (!user) {
-        res.json(Resp.userNotExist);
+        res.json(Resp.userNotFound);
         return;
       }
 
@@ -161,7 +161,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       });
 
       if (!service) {
-        res.json(Resp.commandExecFail);
+        res.json(Resp.queryNotFound);
         return;
       }
 
@@ -207,7 +207,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       res.json(Resp.success);
     } catch (error: any) {
       console.log(error.message);
-      res.json({ error: error.message, ...Resp.sqlExecFail });
+      res.json({ error: error.message, ...Resp.systemError });
     }
   }
 
@@ -218,7 +218,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
       const user = await prisma.user.findFirst({ where: { account: decodeToken.uid } });
       if (!user) {
-        res.json(Resp.userNotExist);
+        res.json(Resp.userNotFound);
         return;
       }
 
@@ -238,7 +238,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       res.json(Resp.success);
     } catch (error: any) {
       console.log(error.message);
-      res.json({ error: error.message, ...Resp.sqlExecFail });
+      res.json({ error: error.message, ...Resp.systemError });
     }
   }
 

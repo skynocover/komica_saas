@@ -9,6 +9,7 @@ import Drawer from '@material-ui/core/Drawer';
 import { makeStyles } from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import { useTranslation } from 'react-i18next';
 
 import { PostForm } from './PostForm';
 // import { User } from 'firebase/auth';
@@ -79,6 +80,7 @@ interface AppProviderProps {
 
 const AppProvider = ({ children }: AppProviderProps) => {
   const router = useRouter();
+  const { t } = useTranslation();
 
   const [authUser, loading, error] = useAuthState(auth);
   const [language, setLanguage] = React.useState<string>('zh_TW');
@@ -152,7 +154,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
 
       data = response.data;
     } catch (error: any) {
-      sanckBar(error.message, 'error');
+      sanckBar(t(error.message), 'error');
     }
     return data;
   };
@@ -178,7 +180,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
   const logout = async () => {
     auth.signOut();
     axios.delete('/api/account', {});
-    router.push('/');
+    router.reload();
   };
 
   /////////////////////////////////////////////////////

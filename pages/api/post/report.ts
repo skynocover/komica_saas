@@ -46,7 +46,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       res.json({ ...Resp.success, reports, count });
     } catch (error: any) {
       console.log(error.message);
-      res.json({ error: error.message, ...Resp.sqlExecFail });
+      res.json({ error: error.message, ...Resp.systemError });
     }
   }
   async function postReport() {
@@ -107,7 +107,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       res.json(Resp.success);
     } catch (error: any) {
       console.log(error.message);
-      res.json({ error: error.message, ...Resp.sqlExecFail });
+      res.json({ error: error.message, ...Resp.systemError });
     }
   }
 
@@ -139,7 +139,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       res.json(Resp.success);
     } catch (error: any) {
       console.log(error.message);
-      res.json({ error: error.message, ...Resp.sqlExecFail });
+      res.json({ error: error.message, ...Resp.systemError });
     }
   }
 

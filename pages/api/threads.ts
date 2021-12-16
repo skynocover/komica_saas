@@ -41,7 +41,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       res.json({ ...Resp.success, threads });
     } catch (error: any) {
       console.log(error.message);
-      res.json({ error: error.message, ...Resp.sqlExecFail });
+      res.json({ error: error.message, ...Resp.systemError });
     }
   }
 
