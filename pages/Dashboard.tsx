@@ -181,7 +181,7 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
   );
 
   const content = (
-    <antd.Tabs defaultActiveKey="3">
+    <antd.Tabs defaultActiveKey="1">
       <antd.Tabs.TabPane tab={t('CreatedBoard')} key="1">
         {Services}
       </antd.Tabs.TabPane>

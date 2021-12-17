@@ -115,10 +115,10 @@ export const Domains = ({ setSpin }: { setSpin: any }) => {
       <div className="flex justify-end mb-2">
         <antd.Button
           type="primary"
-          disabled={data.doRemain ? data.doRemain <= 0 : true}
+          disabled={data?.doRemain ? data.doRemain <= 0 : true}
           onClick={() =>
             appCtx.setModal(
-              <AddDomain services={services} onSuccess={mutate} doRemain={data.doRemain} />,
+              <AddDomain services={services} onSuccess={mutate} doRemain={data?.doRemain} />,
             )
           }
         >

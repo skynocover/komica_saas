@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import dayjs from 'dayjs';
+import * as cfImage from 'cf_images_sdk';
 import { PrismaPromise, Prisma } from '.prisma/client';
 
 import { prisma } from '../../../database/db';
@@ -9,6 +10,8 @@ import { firebaseAuth } from '../../../firebase/auth';
 import { genID } from '../../../utils/genID';
 import { checkUserAndGroup, checkAuth } from '../../../utils/checkServiceAuth';
 import { checkPostForm } from '../../../utils/checkPostForm';
+
+cfImage.Init(process.env.CF_IMAGE_ACCOUNT_ID!, process.env.CF_IMAGE_TOKEN!);
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   async function postReply() {
@@ -42,10 +45,21 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         return { error: Resp.userPermissionDenied, user: null, member: null };
       }
 
+      let imageToken = '';
+      let uploadUrl = '';
+      if (image) {
+        const { id, uploadURL, errorMessages } = await cfImage.GetUploadURL();
+        if (errorMessages) {
+          throw new Error(errorMessages);
+        }
+        imageToken = id;
+        uploadUrl = uploadURL;
+      }
+
       let data: Prisma.ReplyCreateInput = {
         userId: genID(req),
         name: name ? name : 'no name',
-        image,
+        imageToken,
         youtubeID,
         content,
         sage,
@@ -55,7 +69,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       if (user) data.Poster = { connect: { id: user.id } };
       if (member) data.Member = { connect: { id: member.id } };
 
-      await prisma.reply.create({ data });
+      const reply = await prisma.reply.create({ data });
 
       if (!sage) {
         await prisma.thread.update({
@@ -64,7 +78,31 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         });
       }
 
-      res.json(Resp.success);
+      res.json({ ...Resp.success, replyId: reply.id, uploadUrl, imageToken });
+    } catch (error: any) {
+      console.log(error.message);
+      res.json({ error: error.message, ...Resp.systemError });
+    }
+  }
+
+  async function patchReply() {
+    try {
+      const { postId, imageToken, image } = req.body;
+
+      if (!postId || !imageToken || !image) {
+        res.json(Resp.paramInputEmpty);
+        return;
+      }
+
+      const thread = await prisma.reply.findFirst({ where: { id: postId, imageToken } });
+      if (!thread) {
+        res.json(Resp.queryNotFound);
+        return;
+      }
+
+      await prisma.reply.update({ data: { imageToken: '', image }, where: { id: postId } });
+
+      res.json({ ...Resp.success });
     } catch (error: any) {
       console.log(error.message);
       res.json({ error: error.message, ...Resp.systemError });
@@ -122,6 +160,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
     case 'POST':
       return await postReply();
+    case 'PATCH':
+      return await patchReply();
     case 'DELETE':
       return await delReply();
     default:

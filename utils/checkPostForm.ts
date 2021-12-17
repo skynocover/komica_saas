@@ -11,7 +11,7 @@ import { checkUserAndGroup, checkAuth } from './checkServiceAuth';
 import { ServiceAuthCheck } from './serviceAuth';
 
 interface postform {
-  image: string | null;
+  image: boolean;
   content: string | null;
   youtubeID: string | null;
   serviceId: string;
@@ -41,10 +41,6 @@ export const checkPostForm = async ({
 
   if (!content && !image) {
     return { error: Resp.paramInputEmpty, user: null, member: null };
-  }
-
-  if (image && getBinarySize(image) > 4096 * 1000) {
-    return { error: Resp.imgLimit, user: null, member: null };
   }
 
   const service = await prisma.service.findFirst({

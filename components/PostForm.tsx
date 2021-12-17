@@ -12,6 +12,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { useTranslation } from 'react-i18next';
 import IconButton from '@mui/material/IconButton';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import axios from 'axios';
 
 import { AppContext, thread } from './AppContext';
 import { isYoutubeURL, getYoutubeId } from '../utils/regex';
@@ -50,6 +51,49 @@ export const PostForm = ({
   const router = useRouter();
   const { t } = useTranslation();
 
+  interface uploadImageProps {
+    postType: 'thread' | 'reply';
+    url: string;
+    image: File;
+    postId: string;
+    imageToken: string;
+  }
+
+  const uploadImage = async ({
+    postType,
+    url,
+    image,
+    postId,
+    imageToken,
+  }: uploadImageProps): Promise<boolean> => {
+    try {
+      let bodyFormData = new FormData();
+      bodyFormData.append('file', image, image.name);
+
+      const { data } = await axios({
+        method: 'post',
+        url: url,
+        data: bodyFormData,
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+
+      if (!data.success) {
+        throw new Error(data.messages);
+      }
+
+      await appCtx.fetch('patch', `/api/post/${postType}`, {
+        postId,
+        imageToken: imageToken,
+        image: data.result.id,
+      });
+      return true;
+    } catch (error) {
+      appCtx.sanckBar(t('upload_fail'), 'error');
+      console.log(error);
+      return false;
+    }
+  };
+
   const formik = useFormik<FormProps>({
     initialValues: {
       title: '',
@@ -66,7 +110,7 @@ export const PostForm = ({
       if (!values.content && !values.image && !values.youtubeURL)
         errors.content = t('ContentRequired');
       if (values.image && values.youtubeURL) errors.youtubeURL = t('ContentMultiple');
-      if (values.image && values.image.size > 2048 * 1000) errors.image = t('ImageLimit');
+      if (values.image && values.image.size > 1024 * 8 * 1000) errors.image = t('ImageLimit');
 
       if (values.youtubeURL && !isYoutubeURL(values.youtubeURL))
         errors.youtubeURL = t('LinkFormatError');
@@ -74,12 +118,12 @@ export const PostForm = ({
       return errors;
     },
     onSubmit: async (values, action) => {
-      const baseimage = values.image ? await toBase64(values.image) : '';
+      // const baseimage = values.image ? await toBase64(values.image) : '';
       const youtubeID = values.youtubeURL ? getYoutubeId(values.youtubeURL) : null;
 
       if (parentId) {
         const data = await appCtx.fetch('post', '/api/post/reply', {
-          image: baseimage,
+          image: !!values.image,
           youtubeID,
           content: values.content,
           name: values.name,
@@ -89,15 +133,27 @@ export const PostForm = ({
         });
 
         if (data) {
-          appCtx.setDrawOpen(false);
-          appCtx.sanckBar(t('Reply') + t('Success'), 'success');
-          formik.resetForm();
-          router.reload();
+          let success = true;
+          if (values.image) {
+            success = await uploadImage({
+              postType: 'reply',
+              url: data.uploadUrl,
+              image: values.image,
+              postId: data.replyId,
+              imageToken: data.imageToken,
+            });
+          }
+          if (success) {
+            appCtx.setDrawOpen(false);
+            appCtx.sanckBar(t('Reply') + t('Success'), 'success');
+            formik.resetForm();
+            router.reload();
+          }
         }
       } else {
         const data = await appCtx.fetch('post', '/api/post/thread', {
           title: values.title,
-          image: baseimage,
+          image: !!values.image,
           youtubeID,
           content: values.content,
           name: values.name,
@@ -105,8 +161,20 @@ export const PostForm = ({
         });
 
         if (data) {
-          appCtx.sanckBar(t('Post') + t('Success'), 'success');
-          router.reload();
+          let success = true;
+          if (values.image) {
+            success = await uploadImage({
+              postType: 'thread',
+              url: data.uploadUrl,
+              image: values.image,
+              postId: data.threadId,
+              imageToken: data.imageToken,
+            });
+          }
+          if (success) {
+            appCtx.sanckBar(t('Post') + t('Success'), 'success');
+            router.reload();
+          }
         }
       }
     },

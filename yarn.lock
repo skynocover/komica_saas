@@ -1958,6 +1958,12 @@ caniuse-lite@^1.0.30001272, caniuse-lite@^1.0.30001274:
     ts-node "^10.2.1"
     typescript "4.3.5"
 
+"cf_images_sdk@https://github.com/skynocover/CF_images_SDK.git":
+  version "1.0.0"
+  resolved "https://github.com/skynocover/CF_images_SDK.git#8592eff9e0ef24cb25a9651440712b5fe7ff8c34"
+  dependencies:
+    axios "^0.24.0"
+
 chalk@2.4.2, chalk@^2.0.0:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.2.tgz#cd42541677a54333cf541a49108c1432b44c9424"

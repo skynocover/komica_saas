@@ -45,7 +45,7 @@
       "OnlyMember": "Only member",
       "BoardInvitedRequired": "This board is invite required",
       "BoardLoginRequired": "This board is login required",
-      "ImageLimit": "Image file limit is 2MB",
+      "ImageLimit": "Image file limit is 8MB",
       "PleaseInputBoardName": "Please input board name",
       "ConfirmLeave": "Confirm leave",
       "AddForbiddenWord": "Add forbidden word",
@@ -70,6 +70,7 @@
       "Expiration": "Expiration date",
       "Account": "Account",
       "TemplateLess": "Dont use templates",
+      "upload_fail": "Upload Fail",
       "CancelAdd": "Cancel add",
       "GroupBoard": "Group board",
       "MemberList": "Member list",
@@ -99,8 +100,7 @@
       "YoutubeLink": "youtubeLink",
       "BoardVisible": "Board visible",
       "LinkURL": "LinkURL",
-      "ForbiddenWord": "Forbidden word",
-      "Postponed": "Postponed for 7 days"
+      "ForbiddenWord": "Forbidden word"
     }
   },
   "zh_TW": {
@@ -149,7 +149,7 @@
       "OnlyMember": "僅成員",
       "BoardInvitedRequired": "此版面需要通過邀請連結加入",
       "BoardLoginRequired": "此版面需要登入才能進入",
-      "ImageLimit": "圖檔限制為2MB",
+      "ImageLimit": "圖檔限制為8MB",
       "PleaseInputBoardName": "請輸入版面名稱",
       "ConfirmLeave": "確定離開版面",
       "AddForbiddenWord": "新增禁止詞語",
@@ -174,6 +174,7 @@
       "Expiration": "過期時間",
       "Account": "帳號",
       "TemplateLess": "不使用模板",
+      "upload_fail": "上傳失敗",
       "CancelAdd": "取消新增",
       "GroupBoard": "社團討論版",
       "MemberList": "成員列表",
@@ -203,8 +204,7 @@
       "YoutubeLink": "youtube連結",
       "BoardVisible": "討論版可見",
       "LinkURL": "連結網址",
-      "ForbiddenWord": "禁語",
-      "Postponed": "延期七天過期"
+      "ForbiddenWord": "禁語"
     }
   }
 }

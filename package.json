@@ -28,6 +28,7 @@
     "antd": "^4.16.12",
     "axios": "^0.21.1",
     "cf_dns_sdk": "https://github.com/skynocover/CF_DNS_SDK.git",
+    "cf_images_sdk": "https://github.com/skynocover/CF_images_SDK.git",
     "cookies": "^0.8.0",
     "crypto-js": "^4.1.1",
     "dayjs": "^1.10.7",

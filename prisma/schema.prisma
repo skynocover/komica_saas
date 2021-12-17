@@ -75,16 +75,17 @@ model ServiceMember {
 }
 
 model Thread {
-  id        String    @id @default(dbgenerated()) @map("_id") @db.ObjectId
-  userId    String
-  title     String?
-  name      String
-  content   String?
-  image     String?
-  youtubeID String?
-  createdAt DateTime  @default(now())
-  replyAt   DateTime  @default(now())
-  deletedAt DateTime?
+  id         String    @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  userId     String
+  title      String?
+  name       String
+  content    String?
+  image      String?
+  imageToken String?
+  youtubeID  String?
+  createdAt  DateTime  @default(now())
+  replyAt    DateTime  @default(now())
+  deletedAt  DateTime?
 
   posterId String? @db.ObjectId
   Poster   User?   @relation(fields: [posterId], references: [id])
@@ -99,16 +100,17 @@ model Thread {
 }
 
 model Reply {
-  id        String    @id @default(dbgenerated()) @map("_id") @db.ObjectId
-  userId    String
-  name      String?
-  content   String?
-  image     String
-  youtubeID String?
-  sage      Boolean   @default(false)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  id         String    @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  userId     String
+  name       String?
+  content    String?
+  image      String?
+  imageToken String?
+  youtubeID  String?
+  sage       Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
 
   posterId String? @db.ObjectId
   Poster   User?   @relation(fields: [posterId], references: [id])

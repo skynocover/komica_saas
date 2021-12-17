@@ -11,13 +11,16 @@ export const Image = ({ image }: { image: string }) => {
     setCurrentImage(0);
     setIsViewerOpen(false);
   };
+
+  const imgURL = `${process.env.NEXT_PUBLIC_CF_IMAGE_URL}/${image}/public`;
+
   return (
     <div>
-      <img src={image} onClick={() => openImageViewer()} width="100%" style={{ margin: '2px' }} />
+      <img src={imgURL} onClick={() => openImageViewer()} width="100%" style={{ margin: '2px' }} />
 
       {isViewerOpen && (
         <ImageViewer
-          src={[image]}
+          src={[imgURL]}
           currentIndex={currentImage}
           onClose={closeImageViewer}
           disableScroll={false}
