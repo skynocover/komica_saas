@@ -78,7 +78,7 @@ export default function Index({
   const ThreadContent = ({ item }: { item: thread }) => (
     <div className="bg-white rounded-lg">
       {item.image ? (
-        <div className="rounded w-full object-cover object-center mb-5 h-60 overflow-hidden">
+        <div className="rounded w-full object-cover object-center mb-4 h-60 overflow-hidden">
           <Image image={item.image} />
         </div>
       ) : item.youtubeID ? (
@@ -91,7 +91,7 @@ export default function Index({
           />
         </div>
       ) : (
-        <div className="flex items-center justify-center h-60 mb-5">
+        <div className="flex items-center justify-center h-60 mb-4">
           <svg className="svg-icon h-60" viewBox="0,0,20,20">
             <path
               fill="#808080"

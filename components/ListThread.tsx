@@ -122,18 +122,18 @@ export const ListThreads = ({
 
   const Post = ({ post, position }: { post: reply | thread; position: 'inside' | 'outside' }) => {
     const contentClassName = {
-      inside: 'sm:col-start-1 sm:col-span-3',
-      outside: 'sm:col-start-2 sm:col-span-2',
+      inside: 'sm:col-start-1 sm:col-span-3 bg-gray-100',
+      outside: 'sm:col-start-2 sm:col-span-2 bg-gray-100',
     };
 
     const markdownClassName = {
-      inside: 'sm:col-span-3 ml-2',
-      outside: 'sm:col-span-2 ml-2',
+      inside: 'sm:col-span-3 pt-2 pl-2 pr-2 bg-gray-100',
+      outside: 'sm:col-span-2 pt-2 pl-2 pr-2 bg-gray-100',
     };
     return (
       <>
         <ThreadLabel post={post} />
-        <div className="grid grid-cols-1 sm:grid-cols-6">
+        <div className="grid grid-cols-1 sm:grid-cols-6 my-2 ">
           {post.image || post.youtubeID ? (
             <div className={contentClassName[position]}>
               {post.image ? (
@@ -150,7 +150,7 @@ export const ListThreads = ({
               )}
             </div>
           ) : (
-            <div className="col-span-0 md:col-end-3"></div>
+            <div className="col-span-0 md:col-end-3 "></div>
           )}
 
           <div className={markdownClassName[position]}>
