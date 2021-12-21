@@ -1,16 +1,10 @@
 import React from 'react';
-import { GetServerSideProps, GetStaticProps, InferGetServerSidePropsType } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import { Divider, LinkTypeMap } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Typography from '@material-ui/core/Typography';
+import { Divider } from '@material-ui/core';
 import dayjs from 'dayjs';
-import Cookies from 'cookies';
 import { PrismaClient, Prisma } from '@prisma/client';
-import jwt from 'jsonwebtoken';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { Thread, Reply } from '.prisma/client';
 import ReactMarkdown from 'react-markdown';
 import * as antd from 'antd';
 import { useTranslation } from 'react-i18next';
@@ -20,11 +14,9 @@ import { auth } from '../../firebase/firebaseClient';
 import { checkUserAndGroup, checkAuth } from '../../utils/checkServiceAuth';
 import { getUIDfromCookie } from '../../utils/getUIDfromCookie';
 
-import { Notification } from '../../components/Notification';
 import { AppContext } from '../../components/AppContext';
 import { Pages } from '../../components/Pagination';
 import { ListThreads } from '../../components/ListThread';
-import { ReportForm } from '../../components/ReportForm';
 import { PostForm } from '../../components/PostForm';
 import { TopLink, Header, BottomLink } from '../../components/ServiceLink';
 

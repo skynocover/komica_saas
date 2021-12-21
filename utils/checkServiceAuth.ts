@@ -1,11 +1,7 @@
-import dayjs from 'dayjs';
-import type { NextApiRequest, NextApiResponse } from 'next';
 import { Service, User, ServiceMember } from '.prisma/client';
 import { PrismaClient, Prisma } from '@prisma/client';
-import Cookies from 'cookies';
-import { prisma } from '../database/db';
-import { genID } from './genID';
 
+import { prisma } from '../database/db';
 import { ServiceAuthCheck } from './serviceAuth';
 
 export const checkUserAndGroup = async (

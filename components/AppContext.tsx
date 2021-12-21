@@ -6,16 +6,12 @@ import { useRouter } from 'next/router';
 import i18n from 'i18next';
 import Cookies from 'universal-cookie';
 import Drawer from '@material-ui/core/Drawer';
-import { makeStyles } from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { useTranslation } from 'react-i18next';
 
 import { PostForm } from './PostForm';
-// import { User } from 'firebase/auth';
-import firebase from 'firebase/compat/app';
 import { auth } from '../firebase/firebaseClient';
-import { Notification } from '../components/Notification';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 const cookies = new Cookies();

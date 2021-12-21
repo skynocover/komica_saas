@@ -1,16 +1,13 @@
 import React from 'react';
 import Head from 'next/head';
 import type { AppProps } from 'next/app';
-import { AppContext, AppProvider } from '../components/AppContext';
-// import '../styles/globals.css';
-// import '../mainstyle.css';
+import { AppProvider } from '../components/AppContext';
 import 'tailwindcss/tailwind.css';
 import 'font-awesome/css/font-awesome.min.css';
 import 'antd/dist/antd.css';
-import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase/firebaseClient';
-import { useTranslation, initReactI18next } from 'react-i18next';
+import { initReactI18next } from 'react-i18next';
 import i18n from 'i18next';
 import i18nconfig from '../locales/config.json';
 

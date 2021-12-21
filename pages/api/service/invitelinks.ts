@@ -4,8 +4,6 @@ import { PrismaClient, Prisma } from '@prisma/client';
 
 import { prisma } from '../../../database/db';
 import { Resp, Tresp } from '../../../resp/resp';
-import { setLog } from '../../../utils/setLog';
-import { getBinarySize } from '../../../utils/getStringSize';
 import { firebaseAuth } from '../../../firebase/auth';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {

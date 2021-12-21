@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import dayjs from 'dayjs';
 
 import * as cfdns from 'cf_dns_sdk';
 import * as vercel from 'vercel_domains_sdk';
@@ -7,8 +6,6 @@ import * as vercel from 'vercel_domains_sdk';
 
 import { prisma } from '../../../database/db';
 import { Resp, Tresp } from '../../../resp/resp';
-import { setLog } from '../../../utils/setLog';
-import { getBinarySize } from '../../../utils/getStringSize';
 import { firebaseAuth } from '../../../firebase/auth';
 
 cfdns.InitDNSSDK(process.env.CF_ZONE_ID!, process.env.CF_DNS_TOKEN!);

@@ -1,30 +1,19 @@
 import React, { useContext } from 'react';
 import { makeStyles, styled } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
 import { Formik, useField, useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
-import Switch from '@mui/material/Switch';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { AppContext, thread } from './AppContext';
-import { FormInstance } from 'antd/lib/form';
-import { ColumnsType } from 'antd/lib/table';
-import * as antd from 'antd';
 import AddIcon from '@mui/icons-material/Add';
 import BlockIcon from '@mui/icons-material/Block';
-import { MainPage } from './MainPage';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CheckIcon from '@mui/icons-material/Check';
 import MenuItem from '@material-ui/core/MenuItem';
-import NavigationIcon from '@material-ui/icons/Navigation';
-import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { useTranslation } from 'react-i18next';
 
+import { AppContext, thread } from './AppContext';
 import { auth, auth2Int, int2Auth, ServiceAuth } from '../utils/serviceAuth';
 
 const useStyles = makeStyles((theme) => ({

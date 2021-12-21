@@ -1,9 +1,7 @@
 import React from 'react';
-import { GetServerSideProps, GetStaticProps, InferGetServerSidePropsType } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
-import Cookies from 'cookies';
-import jwt from 'jsonwebtoken';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { PrismaClient, Prisma } from '@prisma/client';
 import * as antd from 'antd';
@@ -14,11 +12,7 @@ import { AppContext } from '../../../components/AppContext';
 import { checkUserAndGroup, checkAuth } from '../../../utils/checkServiceAuth';
 import { auth } from '../../../firebase/firebaseClient';
 import { getUIDfromCookie } from '../../../utils/getUIDfromCookie';
-
-import { Pages } from '../../../components/Pagination';
 import { ListThreads } from '../../../components/ListThread';
-import { ReportForm } from '../../../components/ReportForm';
-import { PostForm } from '../../../components/PostForm';
 import { TopLink, Header, BottomLink } from '../../../components/ServiceLink';
 
 export default function Index({

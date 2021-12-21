@@ -8,31 +8,19 @@ import Typography from '@material-ui/core/Typography';
 import dayjs from 'dayjs';
 import * as antd from 'antd';
 import { ColumnsType } from 'antd/lib/table';
-import Badge from '@mui/material/Badge';
-import { makeStyles } from '@material-ui/core/styles';
 import utc from 'dayjs/plugin/utc';
-import ReportIcon from '@mui/icons-material/Report';
-import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged, Auth, User } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { Domains } from '../components/Domains';
-import { useTranslation, initReactI18next } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-import { Notification } from '../components/Notification';
-import { prisma } from '../database/db';
 import { AppContext } from '../components/AppContext';
-import { Pages } from '../components/Pagination';
-import { ListThreads } from '../components/ListThread';
-import { ReportForm } from '../components/ReportForm';
-import { PostForm } from '../components/PostForm';
-import { Thread, Reply } from '.prisma/client';
 import { MainPage } from '../components/MainPage';
 import { Service, service } from '../components/Service';
 import { DangerButton } from '../components/DangerButton';
-// import { initFirebase } from '../firebase/firebaseAdmin';
+
 import { auth } from '../firebase/firebaseClient';
 import { InviteLinkList } from '../components/InviteLinkList';
 import { MemberList } from '../components/MemberList';
-import { Header } from '../components/Header';
 import { Report } from '../components/Report';
 
 dayjs.extend(utc);

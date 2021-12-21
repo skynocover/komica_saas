@@ -1,26 +1,13 @@
 import React from 'react';
-import { GetServerSideProps, GetStaticProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import { Divider, LinkTypeMap } from '@material-ui/core';
+import { Divider } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Typography from '@material-ui/core/Typography';
-import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
-
-import { Notification } from './Notification';
-import { prisma } from '../database/db';
-import { AppContext } from './AppContext';
-
-import { makeStyles } from '@material-ui/core/styles';
-import { Pages } from './Pagination';
-import { ListThreads } from './ListThread';
-import { ReportForm } from './ReportForm';
-import { PostForm } from './PostForm';
-import { Thread, Reply } from '.prisma/client';
-import ReactMarkdown from 'react-markdown';
 import i18n from 'i18next';
 import Cookies from 'universal-cookie';
+
+import { Notification } from './Notification';
 import { service } from './Service';
 
 const cookies = new Cookies();

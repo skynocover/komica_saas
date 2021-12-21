@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-import Cookies from 'cookies';
 
 // 僅管理員 僅成員 已註冊 允許匿名
 export type auth = 'moderator' | 'invited' | 'registered' | 'allowAnonymous';

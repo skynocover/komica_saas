@@ -1,12 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import dayjs from 'dayjs';
-import { prisma } from '../../database/db';
-import { Resp, Tresp } from '../../resp/resp';
-import { setLog } from '../../utils/setLog';
-import { getBinarySize } from '../../utils/getStringSize';
-import { firebaseAuth } from '../../firebase/auth';
 import Cookies from 'cookies';
 import jwt from 'jsonwebtoken';
+
+import { prisma } from '../../database/db';
+import { Resp, Tresp } from '../../resp/resp';
+import { firebaseAuth } from '../../firebase/auth';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   async function login() {

@@ -1,27 +1,12 @@
 import React from 'react';
 import { GetServerSideProps, GetStaticProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import { Divider, LinkTypeMap } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Typography from '@material-ui/core/Typography';
-import dayjs from 'dayjs';
-import * as antd from 'antd';
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import axios from 'axios';
-
-import { Notification } from '../components/Notification';
-import { prisma } from '../database/db';
-import { AppContext } from '../components/AppContext';
-
-import { makeStyles } from '@material-ui/core/styles';
-import { Pages } from '../components/Pagination';
-import { ListThreads } from '../components/ListThread';
-import { ReportForm } from '../components/ReportForm';
-import { PostForm } from '../components/PostForm';
-import { Thread, Reply } from '.prisma/client';
-import { auth } from '../firebase/firebaseClient';
 import { useAuthState } from 'react-firebase-hooks/auth';
+
+import { auth } from '../firebase/firebaseClient';
+import { AppContext } from '../components/AppContext';
 
 export default function Index({
   subdomain,

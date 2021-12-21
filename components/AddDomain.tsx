@@ -1,18 +1,8 @@
 import React, { useContext } from 'react';
 
-import TextField from '@material-ui/core/TextField';
-import Fab from '@material-ui/core/Fab';
-import { makeStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import NavigationIcon from '@material-ui/icons/Navigation';
-import FormControl from '@material-ui/core/FormControl';
-// import Select from '@material-ui/core/Select';
-import { Formik, useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 import * as antd from 'antd';
-import useSWR from 'swr';
 
 import { AppContext } from './AppContext';
 

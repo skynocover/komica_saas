@@ -1,10 +1,7 @@
 import React, { useCallback } from 'react';
-import ImageViewer from 'react-simple-image-viewer';
 import { useRouter } from 'next/router';
 import Popover from '@mui/material/Popover';
-import Button from '@mui/material/Button';
 import Link from 'next/link';
-import Select from 'react-select';
 import i18n from 'i18next';
 import { useTranslation } from 'react-i18next';
 import * as antd from 'antd';

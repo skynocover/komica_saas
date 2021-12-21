@@ -1,13 +1,11 @@
 import React from 'react';
-import { GetServerSideProps, GetStaticProps, InferGetServerSidePropsType } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import { PrismaClient, Prisma } from '@prisma/client';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import TextField from '@mui/material/TextField';
 import * as antd from 'antd';
 import { useTranslation } from 'react-i18next';
 
-import { prisma } from '../../database/db';
 import { auth } from '../../firebase/firebaseClient';
 
 import { AppContext } from '../../components/AppContext';

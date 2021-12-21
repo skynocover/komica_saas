@@ -1,19 +1,8 @@
 import React from 'react';
-import { GetServerSideProps, GetStaticProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import { Divider, LinkTypeMap } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Typography from '@material-ui/core/Typography';
 import dayjs from 'dayjs';
 import * as antd from 'antd';
 import { ColumnsType } from 'antd/lib/table';
-import Badge from '@mui/material/Badge';
-import { makeStyles } from '@material-ui/core/styles';
-import utc from 'dayjs/plugin/utc';
-import ReportIcon from '@mui/icons-material/Report';
-import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged, Auth, User } from 'firebase/auth';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
 import { useTranslation } from 'react-i18next';
 

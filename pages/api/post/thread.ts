@@ -4,12 +4,8 @@ import { PrismaPromise, Prisma } from '.prisma/client';
 import { prisma } from '../../../database/db';
 
 import { Resp, Tresp } from '../../../resp/resp';
-import { setLog } from '../../../utils/setLog';
-import { getBinarySize } from '../../../utils/getStringSize';
 import { firebaseAuth } from '../../../firebase/auth';
 import { genID } from '../../../utils/genID';
-import { checkUserAndGroup, checkAuth } from '../../../utils/checkServiceAuth';
-import { isYoutubeURL } from '../../../utils/regex';
 import { checkPostForm } from '../../../utils/checkPostForm';
 
 cfImage.Init(process.env.CF_IMAGE_ACCOUNT_ID!, process.env.CF_IMAGE_TOKEN!);

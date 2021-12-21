@@ -1,12 +1,9 @@
 import React from 'react';
-import { GetServerSideProps, GetStaticProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import * as antd from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { Notification } from './Notification';
-import { prisma } from '../database/db';
 import { AppContext } from './AppContext';
 import { DangerButton } from './DangerButton';
 import { useTranslation } from 'react-i18next';

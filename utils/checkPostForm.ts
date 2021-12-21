@@ -1,12 +1,7 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaPromise, Prisma, User, ServiceMember } from '.prisma/client';
+import { User, ServiceMember } from '.prisma/client';
 import { prisma } from '../database/db';
 
 import { Resp, Tresp } from '../resp/resp';
-import { setLog } from './setLog';
-import { getBinarySize } from './getStringSize';
-import { firebaseAuth } from '../firebase/auth';
-import { genID } from './genID';
 import { checkUserAndGroup, checkAuth } from './checkServiceAuth';
 import { ServiceAuthCheck } from './serviceAuth';
 
