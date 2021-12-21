@@ -13,6 +13,7 @@ import { prisma } from '../../../database/db';
 import { AppContext } from '../../../components/AppContext';
 import { checkUserAndGroup, checkAuth } from '../../../utils/checkServiceAuth';
 import { auth } from '../../../firebase/firebaseClient';
+import { getUIDfromCookie } from '../../../utils/getUIDfromCookie';
 
 import { Pages } from '../../../components/Pagination';
 import { ListThreads } from '../../../components/ListThread';
@@ -47,6 +48,7 @@ export default function Index({
       if (authUser) {
         appCtx.fetch('post', '/api/account').then(() => router.reload());
       } else {
+        appCtx.fetch('delete', '/api/account');
         router.push('/');
       }
     } else if (error === 'registered') {
@@ -112,13 +114,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
     if (!thread) throw new Error(`Thread not found`);
 
     // 取得用戶uid
-    const cookie = new Cookies(req, res).get(process.env.COOKIE_NAME!);
-    let uid = '';
-    if (cookie) {
-      const decoded = jwt.verify(cookie, process.env.JWT_SECRET || '');
-      if (typeof decoded === 'string') throw new Error(`jwt decode fail`);
-      uid = decoded.uid;
-    }
+    const uid = getUIDfromCookie(req, res);
 
     // 確認用戶進入service權限
     const { user, member } = await checkUserAndGroup(serviceId, uid);

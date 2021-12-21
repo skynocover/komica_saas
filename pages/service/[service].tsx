@@ -13,11 +13,12 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { Thread, Reply } from '.prisma/client';
 import ReactMarkdown from 'react-markdown';
 import * as antd from 'antd';
+import { useTranslation } from 'react-i18next';
 
 import { prisma } from '../../database/db';
 import { auth } from '../../firebase/firebaseClient';
 import { checkUserAndGroup, checkAuth } from '../../utils/checkServiceAuth';
-import { useTranslation } from 'react-i18next';
+import { getUIDfromCookie } from '../../utils/getUIDfromCookie';
 
 import { Notification } from '../../components/Notification';
 import { AppContext } from '../../components/AppContext';
@@ -65,6 +66,7 @@ export default function Index({
       if (authUser) {
         appCtx.fetch('post', '/api/account').then(() => router.reload());
       } else {
+        appCtx.fetch('delete', '/api/account');
         router.push('/');
       }
     } else if (error === 'registered') {
@@ -138,13 +140,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
     if (!temp_service) throw new Error(`Service not found`);
 
     // 取得用戶uid
-    const cookie = new Cookies(req, res).get(process.env.COOKIE_NAME!);
-    let uid = '';
-    if (cookie) {
-      const decoded = jwt.verify(cookie, process.env.JWT_SECRET || '');
-      if (typeof decoded === 'string') throw new Error(`jwt decode fail`);
-      uid = decoded.uid;
-    }
+    const uid = getUIDfromCookie(req, res);
 
     // 確認用戶進入service權限
     const { user, member } = await checkUserAndGroup(serviceId, uid);
