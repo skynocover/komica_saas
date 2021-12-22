@@ -10,6 +10,9 @@ import { auth } from '../firebase/firebaseClient';
 import { initReactI18next } from 'react-i18next';
 import i18n from 'i18next';
 import i18nconfig from '../locales/config.json';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next

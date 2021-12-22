@@ -47,7 +47,9 @@
     "react-markdown": "^7.1.0",
     "react-select": "^5.2.1",
     "react-simple-image-viewer": "^1.1.1",
+    "react-use": "^17.3.1",
     "request-ip": "^2.1.3",
+    "swiper": "^7.3.3",
     "swr": "^1.1.1",
     "universal-cookie": "^4.0.4",
     "vercel_domains_sdk": "https://github.com/skynocover/Vercel_Domains_SDK.git"
