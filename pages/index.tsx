@@ -155,7 +155,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
         if (domain) {
           return {
             redirect: {
-              permanent: false,
+              permanent: true,
               destination: process.env.NEXT_PUBLIC_DOMAIN! + '/service/' + domain.Service.id,
             },
             props: {},
