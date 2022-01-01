@@ -1,5 +1,5 @@
 FROM node:alpine AS build
-RUN apt-get -qy update && apt-get -qy install openssl
+RUN apt -qy update && apt -qy install openssl
 RUN apk add --no-cache libc6-compat
 RUN apk add git
 WORKDIR /app
