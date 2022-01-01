@@ -1,7 +1,7 @@
 FROM node:16.13.1-slim AS build
-RUN apt-get -qy update && apt -qy install openssl
+RUN apt-get -qy update && apt-get -qy install openssl
 # RUN apt add openssl
-RUN apt-get install git
+RUN apt-get -gy install git
 WORKDIR /app
 COPY . .
 RUN yarn install
