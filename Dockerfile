@@ -7,9 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends git && apt-get 
 COPY . .
 RUN yarn install
 RUN yarn global add typescript
-# RUN yarn build
-RUN yarn build --target=aarch64-unknown-linux-gnu
-RUN aarch64-linux-gnu-strip *.node
+RUN yarn build
 
 # --------------> The production image
 FROM node:16.13.1-slim AS runner
