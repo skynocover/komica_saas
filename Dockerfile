@@ -1,7 +1,6 @@
 FROM node:16.13.1-slim AS build
 RUN apt-get -qy update && apt -qy install openssl
 # RUN apt add openssl
-RUN apt-get install libc6-compat
 RUN apt-get install git
 WORKDIR /app
 COPY . .
