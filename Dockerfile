@@ -1,8 +1,8 @@
 FROM node:16.13.1-slim AS build
 RUN apt-get -qy update && apt -qy install openssl
 # RUN apt add openssl
-RUN apk-get add --no-cache libc6-compat
-RUN apk-get add git
+RUN apt-get install --no-cache libc6-compat
+RUN apt-get install git
 WORKDIR /app
 COPY . .
 RUN yarn install
