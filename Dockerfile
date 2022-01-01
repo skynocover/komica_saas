@@ -3,8 +3,7 @@ RUN apt-get -qy update && apt-get -qy install openssl
 # RUN apt add openssl
 # RUN apt-get -gy install git
 # RUN apk add git
-RUN apt-get update && apt-get install -y --no-install-recommends git && apt-get purge -y --auto-remove \
-    WORKDIR /app
+RUN apt-get update && apt-get install -y --no-install-recommends git && apt-get purge -y --auto-remove
 COPY . .
 RUN yarn install
 RUN yarn global add typescript
