@@ -2,8 +2,9 @@ FROM node:16.13.1-slim AS build
 RUN apt-get -qy update && apt-get -qy install openssl
 # RUN apt add openssl
 # RUN apt-get -gy install git
-RUN apk add git
-WORKDIR /app
+# RUN apk add git
+RUN apt-get update && apt-get install -y --no-install-recommends git && apt-get purge -y --auto-remove \
+    WORKDIR /app
 COPY . .
 RUN yarn install
 RUN yarn global add typescript
