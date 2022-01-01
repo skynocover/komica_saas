@@ -5,7 +5,9 @@ WORKDIR /app
 COPY . .
 RUN yarn install
 RUN yarn global add typescript
-RUN yarn build
+# RUN yarn build
+RUN yarn build --target=aarch64-unknown-linux-gnu
+RUN aarch64-linux-gnu-strip *.node
 
 # --------------> The production image
 FROM node:alpine AS runner
