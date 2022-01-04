@@ -4,6 +4,9 @@ RUN apt-get install git
 RUN apt-get install openssl
 WORKDIR /app
 COPY . .
+ARG FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
+ARG FIREBASE_PROJECT_KEY=${FIREBASE_PROJECT_KEY}
+ARG FIREBASE_CLIENT_EMAIL=${FIREBASE_CLIENT_EMAIL}
 RUN yarn install
 RUN yarn global add typescript
 RUN yarn build
