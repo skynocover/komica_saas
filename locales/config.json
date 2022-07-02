@@ -100,7 +100,19 @@
       "YoutubeLink": "youtubeLink",
       "BoardVisible": "Board visible",
       "LinkURL": "LinkURL",
-      "ForbiddenWord": "Forbidden word"
+      "ForbiddenWord": "Forbidden word",
+      "Postponed": "Postponed for 7 days",
+      "DeleteReportRecord": "Delete report record",
+      "Board": "Board",
+      "Report": "Report",
+      "TitleRequired": "Title is required",
+      "ModeratorNameRequired": "Moderator name required",
+      "Reply": "Reply",
+      "Member": "Member",
+      "Success": "Success",
+      "BulletinBoard": "Bulletin board",
+      "Remove": "Remove",
+      "ModifyBoardSuccess": "Modify board success"
     }
   },
   "zh_TW": {
@@ -204,7 +216,19 @@
       "YoutubeLink": "youtube連結",
       "BoardVisible": "討論版可見",
       "LinkURL": "連結網址",
-      "ForbiddenWord": "禁語"
+      "ForbiddenWord": "禁語",
+      "Postponed": "延期七天過期",
+      "DeleteReportRecord": "刪除回報紀錄",
+      "Board": "討論版",
+      "Report": "回報",
+      "TitleRequired": "標題必填",
+      "ModeratorNameRequired": "版主名稱必填",
+      "Reply": "回覆",
+      "Member": "成員",
+      "Success": "成功",
+      "BulletinBoard": "佈告欄",
+      "Remove": "移除",
+      "ModifyBoardSuccess": "修改版面成功"
     }
   }
 }

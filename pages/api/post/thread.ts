@@ -10,7 +10,7 @@ import { checkPostForm } from '../../../utils/checkPostForm';
 
 cfImage.Init(process.env.CF_IMAGE_ACCOUNT_ID!, process.env.CF_IMAGE_TOKEN!);
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const Thread = async (req: NextApiRequest, res: NextApiResponse) => {
   async function postThread() {
     try {
       const { title, image, youtubeID, content, name, serviceId } = req.body;
@@ -166,3 +166,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 export const config = { api: { bodyParser: { sizeLimit: '4mb' } } };
+
+export default Thread;

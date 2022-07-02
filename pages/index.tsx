@@ -59,9 +59,9 @@ export default function Index({
   }, []);
 
   const ThreadContent = ({ item }: { item: thread }) => (
-    <div className="bg-gray-100 p-1 rounded-lg h-96 overflow-hidden">
+    <div className="p-1 overflow-hidden bg-gray-100 rounded-lg h-96">
       {item.image ? (
-        <div className="rounded w-full object-cover object-center mb-4 h-1/2 overflow-hidden">
+        <div className="object-cover object-center w-full mb-4 overflow-hidden rounded h-1/2">
           <Image image={item.image} />
         </div>
       ) : item.youtubeID ? (
@@ -77,12 +77,12 @@ export default function Index({
         <></>
       )}
 
-      <h2 className="text-lg text-gray-900 font-medium title-font mb-4">
+      <h2 className="mb-4 text-lg font-medium text-gray-900 title-font">
         <Link href={`/service/${item.Service.id}/${item.id}`}>
           <a target="_blank">{item.title}</a>
         </Link>
       </h2>
-      <p className="leading-relaxed text-base">
+      <p className="text-base leading-relaxed">
         <ReactMarkdown children={item.content} />
       </p>
     </div>
@@ -90,14 +90,14 @@ export default function Index({
 
   const Threads = ({ title, threads }: { title: string; threads: thread[] }) => (
     <>
-      <div className="text-center max-w-xl mx-auto my-8 ">
+      <div className="max-w-xl mx-auto my-8 text-center ">
         <h3 className="text-xl font-light">{title}</h3>
         <div className="text-center">
-          <span className="inline-block w-1 h-1 rounded-full bg-indigo-500 ml-1"></span>
-          <span className="inline-block w-3 h-1 rounded-full bg-indigo-500 ml-1"></span>
-          <span className="inline-block w-40 h-1 rounded-full bg-indigo-500 ml-1"></span>
-          <span className="inline-block w-3 h-1 rounded-full bg-indigo-500 ml-1"></span>
-          <span className="inline-block w-1 h-1 rounded-full bg-indigo-500 ml-1"></span>
+          <span className="inline-block w-1 h-1 ml-1 bg-indigo-500 rounded-full"></span>
+          <span className="inline-block w-3 h-1 ml-1 bg-indigo-500 rounded-full"></span>
+          <span className="inline-block w-40 h-1 ml-1 bg-indigo-500 rounded-full"></span>
+          <span className="inline-block w-3 h-1 ml-1 bg-indigo-500 rounded-full"></span>
+          <span className="inline-block w-1 h-1 ml-1 bg-indigo-500 rounded-full"></span>
         </div>
       </div>
 
@@ -119,11 +119,11 @@ export default function Index({
   return (
     <>
       <Header />
-      <div className="min-w-screen min-h-screen bg-gray-50 flex items-center justify-center ">
-        <div className="w-full bg-white border-t border-b border-gray-200 px-5 py-14 text-gray-800">
+      <div className="flex items-center justify-center min-h-screen min-w-screen bg-gray-50 ">
+        <div className="w-full px-5 text-gray-800 bg-white border-t border-b border-gray-200 py-14">
           <div className="w-full max-w-6xl mx-auto">
-            <div className="text-center max-w-xl mx-auto">
-              <h1 className="text-6xl md:text-7xl font-bold  text-gray-600">Akraft</h1>
+            <div className="max-w-xl mx-auto text-center">
+              <h1 className="text-6xl font-bold text-gray-600 md:text-7xl">Akraft</h1>
             </div>
 
             {/* 活躍的公開討論串 */}
@@ -167,7 +167,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
     const exThreads = await prisma.thread.findMany({
       take: 12,
       orderBy: { replyAt: 'desc' },
-      where: { Service: { visible: 'allowAnonymous' } },
+      where: { Service: { visible: 'allowAnonymous' }, deletedAt: null },
       select: {
         id: true,
         title: true,

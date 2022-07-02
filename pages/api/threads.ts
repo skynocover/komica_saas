@@ -3,7 +3,7 @@ import { prisma } from '../../database/db';
 import { Resp, Tresp } from '../../resp/resp';
 import { firebaseAuth } from '../../firebase/auth';
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const Threads = async (req: NextApiRequest, res: NextApiResponse) => {
   // 取得自己加入的群組
   async function getNewestThread() {
     try {
@@ -50,3 +50,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 };
+
+export default Threads;

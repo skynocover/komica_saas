@@ -3570,7 +3570,7 @@ hyphenate-style-name@^1.0.2, hyphenate-style-name@^1.0.3:
 
 "i18n_airtable@https://github.com/skynocover/i18n_airtable.git":
   version "1.0.0"
-  resolved "https://github.com/skynocover/i18n_airtable.git#6bbc091bcbe57efa200a2c4cc5f6114f49ef1af0"
+  resolved "https://github.com/skynocover/i18n_airtable.git#6a46462f620797ebb8d4f4803f85b26f3e6ed513"
   dependencies:
     axios "^0.24.0"
     dotenv "^10.0.0"

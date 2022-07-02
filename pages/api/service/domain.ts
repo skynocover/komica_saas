@@ -1,28 +1,22 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import * as cfdns from 'cf_dns_sdk';
-import * as vercel from 'vercel_domains_sdk';
-// import vercel from 'vercel_domains_sdk';
 
 import { prisma } from '../../../database/db';
 import { Resp, Tresp } from '../../../resp/resp';
 import { firebaseAuth } from '../../../firebase/auth';
 
 cfdns.InitDNSSDK(process.env.CF_ZONE_ID!, process.env.CF_DNS_TOKEN!);
-vercel.Init(process.env.VERCEL_PROJECT_ID!, process.env.VERCEL_TOKEN!);
 
 const vercelIP = '76.76.21.21';
 
 const domainUplimit = 30;
 
-const getRealDomain = (): string => {
-  if (process.env.NEXT_PUBLIC_DOMAIN === 'http://localhost:3000') {
-    return 'akraft.net';
-  }
-  return new URL(process.env.NEXT_PUBLIC_DOMAIN!).host;
-};
-
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+/* 
+  Allow users to set their own domains
+  The feature has been postponed 
+*/
+const Domains = async (req: NextApiRequest, res: NextApiResponse) => {
   async function getDomain() {
     try {
       const decodeToken = await firebaseAuth(req);
@@ -57,7 +51,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   async function postDomain() {
     let cfDNSID: string = '';
-    let delDomain: string = '';
     try {
       const decodeToken = await firebaseAuth(req);
 
@@ -97,12 +90,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         return;
       }
 
-      delDomain = domainName + '.' + getRealDomain();
-
-      const { errorMessages: vercelError } = await vercel.VercelAddDomain(delDomain);
-      if (vercelError) {
-        throw new Error(vercelError);
-      }
       const { result, errorMessages } = await cfdns.CreateDNS({
         name: domainName,
         content: vercelIP,
@@ -119,11 +106,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
       res.json(Resp.success);
     } catch (error: any) {
-      if (delDomain) {
-        vercel.VercelDeleteDomain(delDomain).catch((error) => {
-          console.log(error);
-        });
-      }
       if (cfDNSID) {
         cfdns.DeleteDNS(cfDNSID).catch((error) => {
           console.log(error);
@@ -155,11 +137,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         throw new Error(cfError.errorMessages);
       }
 
-      const vercerError = await vercel.VercelDeleteDomain(domain.name + '.' + getRealDomain());
-      if (vercerError?.errorMessages) {
-        throw new Error(vercerError.errorMessages);
-      }
-
       await prisma.domain.delete({ where: { id } });
 
       res.json(Resp.success);
@@ -180,3 +157,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 };
+
+export default Domains;

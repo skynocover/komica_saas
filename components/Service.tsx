@@ -208,7 +208,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
           min={0}
           max={3}
         />
-        <Typography className="pl-2 flex items-center" component="div">
+        <Typography className="flex items-center pl-2" component="div">
           {`${lable}: ` + authText(state)}
         </Typography>
       </>
@@ -327,7 +327,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
 
   return (
     <div className="flex justify-center">
-      <div className="lg:w-1/2  sm:w-2/3 w-full grid grid-cols-2 gap-1">
+      <div className="grid w-full grid-cols-2 gap-1 lg:w-1/2 sm:w-2/3">
         {!service && (
           <Select
             label={t('Template')}
@@ -411,7 +411,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
           min={0}
           max={3}
         />
-        <Typography className="pl-2 flex items-center" component="div">
+        <Typography className="flex items-center pl-2" component="div">
           {t('BoardVisible') + ': ' + authText(auth.visible)}
         </Typography>
 
@@ -425,7 +425,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
           min={0}
           max={3}
         />
-        <Typography className="pl-2 flex items-center" component="div">
+        <Typography className="flex items-center pl-2" component="div">
           {t('Post') + ': ' + authText(auth.thread)}
         </Typography>
 
@@ -439,7 +439,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
           min={0}
           max={3}
         />
-        <Typography className="pl-2 flex items-center" component="div">
+        <Typography className="flex items-center pl-2" component="div">
           {t('Reply') + ': ' + authText(auth.reply)}
         </Typography>
 
@@ -453,11 +453,11 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
           min={0}
           max={3}
         />
-        <Typography className="pl-2 flex items-center" component="div">
+        <Typography className="flex items-center pl-2" component="div">
           {t('Report') + ': ' + authText(auth.report)}
         </Typography>
 
-        <div className="col-span-2 flex">
+        <div className="flex col-span-2">
           <Typography variant="h6" component="div">
             {t('TopLink')}
           </Typography>
@@ -470,7 +470,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
         </div>
 
         {topLinks.map((item, index) => (
-          <div key={index} className="col-span-2 flex items-center mb-1">
+          <div key={index} className="flex items-center col-span-2 mb-1">
             <TextField
               className="w-1/4"
               name={`${item}_${index}_name`}
@@ -497,7 +497,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
           </div>
         ))}
 
-        <div className="col-span-2 flex">
+        <div className="flex col-span-2">
           <Typography variant="h6" gutterBottom component="div">
             {t('TitleLink')}
           </Typography>
@@ -510,7 +510,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
         </div>
 
         {headLinks.map((item, index) => (
-          <div key={index} className="col-span-2 flex items-center mb-1">
+          <div key={index} className="flex items-center col-span-2 mb-1">
             <TextField
               className="w-1/4"
               name={`${item}_${index}_name`}
@@ -538,7 +538,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
           </div>
         ))}
 
-        <div className="col-span-2 flex">
+        <div className="flex col-span-2">
           <Typography variant="h6" gutterBottom component="div">
             {t('AddForbiddenWord')}
           </Typography>
@@ -551,7 +551,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
         </div>
 
         {forbidContents.map((item, index) => (
-          <div key={index} className="col-span-2 flex items-center mb-1">
+          <div key={index} className="flex items-center col-span-2 mb-1">
             <TextField
               className="flex-1"
               name={`${item}_${index}_name`}

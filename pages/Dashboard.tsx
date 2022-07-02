@@ -176,9 +176,6 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
       <antd.Tabs.TabPane tab={t('ReportBoard')} key="2">
         <Report setSpin={setSpin} />
       </antd.Tabs.TabPane>
-      <antd.Tabs.TabPane tab={t('Domain')} key="3">
-        <Domains setSpin={setSpin} />
-      </antd.Tabs.TabPane>
     </antd.Tabs>
   );
 
