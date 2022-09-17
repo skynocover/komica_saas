@@ -80,7 +80,7 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
     {
       title: t('CreateTime'),
       align: 'center',
-      render: (item) => <>{dayjs(item.createdAt).format('YYYY-MM-DDTHH:mm')}</>,
+      render: (item) => <>{dayjs(item.createdAt).format('YYYY-MM-DD HH:mm')}</>,
     },
     {
       align: 'center',
@@ -126,7 +126,7 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
       align: 'center',
       render: (item) => (
         <DangerButton
-          title={t('DeleteBaord')}
+          title={t('DeleteBoard')}
           message={t('ConfirmDelete') + '?'}
           onClick={() => delService(item.id)}
         />

@@ -63,9 +63,9 @@ export default function Index({}: InferGetServerSidePropsType<typeof getServerSi
   return (
     <>
       {serviceName && (
-        <div className="grid gird-cols-1  h-screen ">
+        <div className="grid h-screen gird-cols-1 ">
           <div className="flex items-end justify-center">
-            <p className="font-bold text-3xl">{t('InviteTo') + serviceName}</p>
+            <p className="text-3xl font-bold">{t('InviteTo') + serviceName}</p>
           </div>
           <div>
             <div className="flex justify-center mb-2">

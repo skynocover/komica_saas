@@ -86,7 +86,7 @@ export const PostForm = ({
       });
       return true;
     } catch (error) {
-      appCtx.sanckBar(t('upload_fail'), 'error');
+      appCtx.snackBar(t('upload_fail'), 'error');
       console.log(error);
       return false;
     }
@@ -143,7 +143,7 @@ export const PostForm = ({
           }
           if (success) {
             appCtx.setDrawOpen(false);
-            appCtx.sanckBar(t('Reply') + t('Success'), 'success');
+            appCtx.snackBar(t('Reply') + t('Success'), 'success');
             formik.resetForm();
             router.reload();
           }
@@ -170,7 +170,7 @@ export const PostForm = ({
             });
           }
           if (success) {
-            appCtx.sanckBar(t('Post') + t('Success'), 'success');
+            appCtx.snackBar(t('Post') + t('Success'), 'success');
             router.reload();
           }
         }
@@ -183,7 +183,7 @@ export const PostForm = ({
 
   return (
     <div className="flex justify-center">
-      <div className="lg:w-1/3 md:w-1/2 sm:w-2/3 w-full grid grid-cols-1">
+      <div className="grid w-full grid-cols-1 lg:w-1/3 md:w-1/2 sm:w-2/3">
         {!parentId && (
           <TextField
             error={formik.errors.title ? true : false}

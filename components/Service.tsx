@@ -181,11 +181,11 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
   };
 
   const AuthSlider = ({
-    lable,
+    label,
     state,
     stateName,
   }: {
-    lable: string;
+    label: string;
     state: any;
     stateName: any;
   }) => {
@@ -209,7 +209,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
           max={3}
         />
         <Typography className="flex items-center pl-2" component="div">
-          {`${lable}: ` + authText(state)}
+          {`${label}: ` + authText(state)}
         </Typography>
       </>
     );
@@ -297,7 +297,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
 
         if (data) {
           action.resetForm();
-          appCtx.sanckBar(t('ModifyBoardSuccess'), 'success');
+          appCtx.snackBar(t('ModifyBoardSuccess'), 'success');
           finish();
         }
       } else {
@@ -318,7 +318,7 @@ export const Service = ({ service, finish }: { service?: service; finish: any })
 
         if (data) {
           action.resetForm();
-          appCtx.sanckBar(t('AddBoardSuccess'), 'success');
+          appCtx.snackBar(t('AddBoardSuccess'), 'success');
           finish();
         }
       }

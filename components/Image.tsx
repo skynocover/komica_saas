@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import ImageViewer from 'react-simple-image-viewer';
+import NImage from 'next/image';
 
 export const Image = ({ image }: { image: string }) => {
   const [currentImage, setCurrentImage] = React.useState(0);

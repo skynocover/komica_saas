@@ -120,7 +120,7 @@ export const Report = ({ setSpin }: { setSpin: any }) => {
     {
       title: t('ReportTime'),
       align: 'center',
-      render: (item) => <>{dayjs(item.createdAt).format('YYYY-MM-DDTHH:mm')}</>,
+      render: (item) => <>{dayjs(item.createdAt).format('YYYY-MM-DD HH:mm')}</>,
     },
     {
       align: 'center',

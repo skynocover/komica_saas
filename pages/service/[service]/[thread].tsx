@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import { prisma } from '../../../database/db';
 import { AppContext } from '../../../components/AppContext';
-import { checkUserAndGroup, checkAuth } from '../../../utils/checkServiceAuth';
+import { checkUserAndGroup, checkAuth as fCheckAuth } from '../../../utils/checkServiceAuth';
 import { auth } from '../../../firebase/firebaseClient';
 import { getUIDfromCookie } from '../../../utils/getUIDfromCookie';
 import { ListThreads } from '../../../components/ListThread';
@@ -18,7 +18,7 @@ import { TopLink, Header, BottomLink } from '../../../components/ServiceLink';
 export default function Index({
   service,
   threads,
-  checkauth,
+  checkAuth,
   displayName,
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -26,11 +26,6 @@ export default function Index({
   const router = useRouter();
   const [authUser, loading] = useAuthState(auth);
   const { t } = useTranslation();
-
-  React.useEffect(() => {
-    console.log(threads);
-    // console.log(error);
-  }, []);
 
   const login = async () => {
     await appCtx.login();
@@ -48,9 +43,9 @@ export default function Index({
     } else if (error === 'registered') {
       return (
         <>
-          <div className="grid gird-cols-1  h-screen ">
+          <div className="grid h-screen gird-cols-1 ">
             <div className="flex items-end justify-center">
-              <p className="font-bold text-3xl">{t('BoardLoginRequired')}</p>
+              <p className="text-3xl font-bold">{t('BoardLoginRequired')}</p>
             </div>
             <div>
               <div className="flex justify-center">
@@ -73,10 +68,10 @@ export default function Index({
       <TopLink service={service} />
       <Header service={service} />
       <ListThreads
-        onepage={true}
+        onePage={true}
         serviceId={service.id}
         threads={threads}
-        auth={checkauth}
+        auth={checkAuth}
         displayName={displayName}
       />
       <BottomLink service={service} />
@@ -113,8 +108,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
     // 確認用戶進入service權限
     const { user, member } = await checkUserAndGroup(serviceId, uid);
 
-    const checkauth = await checkAuth(temp_service, uid, user, member);
-    if (!checkauth.visible) {
+    const checkAuth = await fCheckAuth(temp_service, uid, user, member);
+    if (!checkAuth.visible) {
       const serviceAuth = temp_service.auth as Prisma.JsonObject;
       if (serviceAuth.visible === 'invited') {
         return { props: { error: 'invited' } };
@@ -146,7 +141,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
     };
 
     return {
-      props: { service, threads, checkauth, displayName: member ? member.displayName : null },
+      props: { service, threads, checkAuth, displayName: member ? member.displayName : null },
     };
   } catch (error: any) {
     console.log(error.message);

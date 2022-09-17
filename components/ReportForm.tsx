@@ -43,7 +43,7 @@ export const ReportForm = ({ id }: { id: string }) => {
         })
         .then(() => {
           appCtx.setDrawOpen(false);
-          appCtx.sanckBar(t('Report') + t('Success'), 'success');
+          appCtx.snackBar(t('Report') + t('Success'), 'success');
           formik.resetForm();
         });
     },
@@ -51,7 +51,7 @@ export const ReportForm = ({ id }: { id: string }) => {
 
   return (
     <div className="flex justify-center">
-      <div className="lg:w-1/3 md:w-1/2 sm:w-2/3 w-full grid grid-cols-1 ">
+      <div className="grid w-full grid-cols-1 lg:w-1/3 md:w-1/2 sm:w-2/3 ">
         <FormControl variant="filled" className={classes.formControl}>
           <InputLabel id="demo-simple-select-filled-label">{t('ReportReason')}</InputLabel>
           <Select

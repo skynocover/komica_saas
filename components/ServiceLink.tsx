@@ -33,7 +33,7 @@ export const TopLink = ({ service }: { service: service }) => {
       )}
       <div className="relative inline-flex">
         <svg
-          className="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none"
+          className="absolute top-0 right-0 w-2 h-2 m-4 pointer-events-none"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 412 232"
         >
@@ -46,7 +46,7 @@ export const TopLink = ({ service }: { service: service }) => {
         <select
           onChange={(e) => handleChange(e)}
           value={i18n.language}
-          className=" text-gray-600 h-10 pl-5 pr-10 bg-white  focus:outline-none appearance-none"
+          className="h-10 pl-5 pr-10 text-gray-600 bg-white appearance-none  focus:outline-none"
         >
           <option value="zh_TW">Chinese</option>
           <option value="en">English</option>

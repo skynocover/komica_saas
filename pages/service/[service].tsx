@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 
 import { prisma } from '../../database/db';
 import { auth } from '../../firebase/firebaseClient';
-import { checkUserAndGroup, checkAuth } from '../../utils/checkServiceAuth';
+import { checkUserAndGroup, checkAuth as fCheckAuth } from '../../utils/checkServiceAuth';
 import { getUIDfromCookie } from '../../utils/getUIDfromCookie';
 
 import { AppContext } from '../../components/AppContext';
@@ -25,7 +25,7 @@ const pageSize = 8;
 export default function Index({
   service,
   count,
-  checkauth,
+  checkAuth,
   displayName,
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -40,9 +40,9 @@ export default function Index({
 
   React.useEffect(() => {}, []);
 
-  const Discription = () => (
+  const Description = () => (
     <div className="flex justify-center">
-      <div className="w-full lg:w-4/12 sm:w-8/12 md:w-1/2 grid grid-cols-1">
+      <div className="grid w-full grid-cols-1 lg:w-4/12 sm:w-8/12 md:w-1/2">
         {service?.description && <ReactMarkdown children={service.description} />}
       </div>
     </div>
@@ -64,9 +64,9 @@ export default function Index({
     } else if (error === 'registered') {
       return (
         <>
-          <div className="grid gird-cols-1  h-screen ">
+          <div className="grid h-screen gird-cols-1 ">
             <div className="flex items-end justify-center">
-              <p className="font-bold text-3xl">{t('BoardLoginRequired')}</p>
+              <p className="text-3xl font-bold">{t('BoardLoginRequired')}</p>
             </div>
             <div>
               <div className="flex justify-center">
@@ -88,15 +88,15 @@ export default function Index({
     <>
       <TopLink service={service} />
       <Header service={service} />
-      {checkauth.thread && <PostForm key="postform" displayName={displayName} />}
-      <Discription />
+      {checkAuth.thread && <PostForm key="postForm" displayName={displayName} />}
+      <Description />
       <Pages page={page} pageCount={pageCount} />
       <Divider />
       <ListThreads
-        onepage={false}
+        onePage={false}
         serviceId={service.id}
         threads={service.Thread}
-        auth={checkauth}
+        auth={checkAuth}
         displayName={displayName}
       />
       <Pages page={page} pageCount={pageCount} />
@@ -136,8 +136,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
 
     // 確認用戶進入service權限
     const { user, member } = await checkUserAndGroup(serviceId, uid);
-    const checkauth = await checkAuth(temp_service, uid, user, member);
-    if (!checkauth.visible) {
+    const checkAuth = await fCheckAuth(temp_service, uid, user, member);
+    if (!checkAuth.visible) {
       const serviceAuth = temp_service.auth as Prisma.JsonObject;
       if (serviceAuth.visible === 'invited') {
         return { props: { error: 'invited' } };
@@ -172,7 +172,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
     };
 
     return {
-      props: { service, count, checkauth, displayName: member ? member.displayName : null },
+      props: { service, count, checkAuth, displayName: member ? member.displayName : null },
     };
   } catch (error: any) {
     console.log(error.message);

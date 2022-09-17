@@ -96,7 +96,7 @@ export const Domains = ({ setSpin }: { setSpin: any }) => {
     {
       title: t('CreateTime'),
       align: 'center',
-      render: (item) => <>{dayjs(item.createdAt).format('YYYY-MM-DDTHH:mm')}</>,
+      render: (item) => <>{dayjs(item.createdAt).format('YYYY-MM-DD HH:mm')}</>,
     },
     {
       align: 'center',

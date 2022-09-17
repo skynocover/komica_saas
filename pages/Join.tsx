@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 
 import { MainPage } from '../components/MainPage';
 import { auth } from '../firebase/firebaseClient';
-import { ReDisplayname } from '../components/ReDisplayname';
+import { ReDisplayName } from '../components/ReDisplayName';
 
 dayjs.extend(utc);
 
@@ -76,7 +76,7 @@ export default function Index() {
     {
       title: t('JoinTime'),
       align: 'center',
-      render: (item) => <>{dayjs(item.createdAt).format('YYYY-MM-DDTHH:mm')}</>,
+      render: (item) => <>{dayjs(item.createdAt).format('YYYY-MM-DD HH:mm')}</>,
     },
     {
       align: 'center',
@@ -85,9 +85,9 @@ export default function Index() {
           type="primary"
           onClick={() =>
             appCtx.setModal(
-              <ReDisplayname
+              <ReDisplayName
                 serviceId={item.Service.id}
-                onfinished={getGroup}
+                onFinished={getGroup}
                 displayName={item.displayName}
               />,
             )
@@ -123,7 +123,7 @@ export default function Index() {
 
   const content = (
     <antd.Spin spinning={spin}>
-      <div className="flex space-x-4 my-3 ">
+      <div className="flex my-3 space-x-4 ">
         <div>
           <antd.Input
             addonBefore={t('SearchBoard')}

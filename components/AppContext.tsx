@@ -59,7 +59,7 @@ interface AppContextProps {
 
   setDrawOpen: React.Dispatch<React.SetStateAction<boolean>>;
   toggle: (open: boolean, form?: any) => (event: any) => void;
-  sanckBar: (label: string, severity: 'success' | 'error') => void;
+  snackBar: (label: string, severity: 'success' | 'error') => void;
 
   setModal: (modal: any, width?: number) => void;
 
@@ -115,7 +115,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
     setBarOpen(false);
   };
 
-  const sanckBar = (label: string, severity: 'success' | 'error') => {
+  const snackBar = (label: string, severity: 'success' | 'error') => {
     setSuccessLabel(label);
     setSeverity(severity);
     setBarOpen(true);
@@ -150,7 +150,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
 
       data = response.data;
     } catch (error: any) {
-      sanckBar(t(error.message), 'error');
+      snackBar(t(error.message), 'error');
     }
     return data;
   };
@@ -195,7 +195,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
 
         setDrawOpen,
         toggle,
-        sanckBar,
+        snackBar,
         setModal,
       }}
     >

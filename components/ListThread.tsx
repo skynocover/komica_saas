@@ -23,13 +23,13 @@ import { AppContext, thread, reply } from './AppContext';
 import { ServiceAuthCheck } from '../utils/serviceAuth';
 
 export const ListThreads = ({
-  onepage,
+  onePage,
   serviceId,
   threads,
   auth,
   displayName,
 }: {
-  onepage: boolean;
+  onePage: boolean;
   serviceId: string;
   threads: any;
   auth: ServiceAuthCheck;
@@ -68,7 +68,7 @@ export const ListThreads = ({
     };
 
     return (
-      <div id={post.id} className="flex pt-2 items-center justify-center">
+      <div id={post.id} className="flex items-center justify-center pt-2">
         {post.title ? (
           <Link href={`/service/${serviceId}/${post.id}`} underline="always">
             <span className="text-red-600"> {post.title}</span>
@@ -108,7 +108,7 @@ export const ListThreads = ({
             size="small"
             onClick={appCtx.toggle(
               true,
-              <PostForm key="postform_reply" parentId={post.id} displayName={displayName} />,
+              <PostForm key="postForm_reply" parentId={post.id} displayName={displayName} />,
             )}
           >
             <ReplyRoundedIcon />
@@ -131,7 +131,7 @@ export const ListThreads = ({
     return (
       <>
         <ThreadLabel post={post} />
-        <div className="grid grid-cols-1 sm:grid-cols-6 my-2 ">
+        <div className="grid grid-cols-1 my-2 sm:grid-cols-6 ">
           {post.image || post.youtubeID ? (
             <div className={contentClassName[position]}>
               {post.image ? (
@@ -161,7 +161,7 @@ export const ListThreads = ({
 
   const Thread = ({ thread }: { thread: thread }) => {
     const appCtx = useContext(AppContext);
-    const showReply = onepage ? thread.Reply?.length! : 8; //如果非一頁式瀏覽最多顯示回應數
+    const showReply = onePage ? thread.Reply?.length! : 8; //如果非一頁式瀏覽最多顯示回應數
 
     return (
       <>

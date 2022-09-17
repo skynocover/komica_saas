@@ -10,14 +10,14 @@ interface Member {
   expiredAt?: string;
 }
 
-export const ReDisplayname = ({
+export const ReDisplayName = ({
   serviceId,
-  onfinished,
+  onFinished,
   displayName,
 }: {
   serviceId: string;
   displayName: string;
-  onfinished: any;
+  onFinished: any;
 }) => {
   const appCtx = React.useContext(AppContext);
   const router = useRouter();
@@ -29,12 +29,12 @@ export const ReDisplayname = ({
       serviceId,
       displayName: values.displayName,
     });
-    if (data) onfinished();
+    if (data) onFinished();
   };
 
   return (
     <antd.Form onFinish={changeName} initialValues={{ displayName }}>
-      <h5 className="font-weight-bold mb-4">{t('modify') + t('DisplayName')}</h5>
+      <h5 className="mb-4 font-weight-bold">{t('modify') + t('DisplayName')}</h5>
 
       <antd.Form.Item
         label={t('DisplayName')}

@@ -47,7 +47,7 @@ export const AddDomain = ({
 
   return (
     <antd.Form onFinish={onFinish}>
-      <h5 className="font-weight-bold mb-4">
+      <h5 className="mb-4 font-weight-bold">
         新增網址 ({t('service_in_beta') + ', ' + t('term_might_change')})
       </h5>
 
