@@ -161,7 +161,7 @@ export const ListThreads = ({
 
   const Thread = ({ thread }: { thread: thread }) => {
     const appCtx = useContext(AppContext);
-    const showReply = onePage ? thread.Reply?.length! : 8; //如果非一頁式瀏覽最多顯示回應數
+    const showReply = onePage ? thread.Reply?.length! : 5; //如果非一頁式瀏覽最多顯示回應數
 
     return (
       <>
