@@ -8,8 +8,9 @@ import ReactMarkdown from 'react-markdown';
 import Link from 'next/link';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
-import SwiperCore, { Navigation, Swiper } from 'swiper';
-import { Swiper as SwiperFC, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
 import { useWindowSize } from 'react-use';
 
 import { prisma } from '../database/db';
@@ -19,8 +20,6 @@ import { Image } from '../components/Image';
 import { Header } from '../components/Header';
 
 dayjs.extend(utc);
-
-SwiperCore.use([Navigation]);
 
 interface thread {
   id: string;
@@ -78,9 +77,9 @@ export default function Index({
       )}
 
       <h2 className="mb-4 text-lg font-medium text-gray-900 title-font">
-        <Link href={`/service/${item.Service.id}/${item.id}`}>
-          <a target="_blank">{item.title}</a>
-        </Link>
+        <a target="_blank">
+          <Link href={`/service/${item.Service.id}/${item.id}`}>{item.title}</Link>
+        </a>
       </h2>
       <p className="text-base leading-relaxed">
         <ReactMarkdown children={item.content} />
@@ -101,7 +100,8 @@ export default function Index({
         </div>
       </div>
 
-      <SwiperFC
+      <Swiper
+        modules={[Navigation, Pagination]}
         slidesPerView={width > 1024 ? 4 : width > 768 ? 3 : width > 640 ? 2 : 1}
         slidesPerGroup={width > 1024 ? 4 : width > 768 ? 3 : width > 640 ? 2 : 1}
         spaceBetween={10}
@@ -112,7 +112,7 @@ export default function Index({
             <ThreadContent key={index} item={thread} />
           </SwiperSlide>
         ))}
-      </SwiperFC>
+      </Swiper>
     </>
   );
 
@@ -167,7 +167,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
     const exThreads = await prisma.thread.findMany({
       take: 12,
       orderBy: { replyAt: 'desc' },
-      where: { Service: { visible: 'allowAnonymous' }, deletedAt: null },
+      where: { Service: { visible: 'allowAnonymous' } },
       select: {
         id: true,
         title: true,

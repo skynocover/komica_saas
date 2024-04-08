@@ -4,12 +4,11 @@ datasource db {
 }
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["mongoDb"]
+  provider = "prisma-client-js"
 }
 
 model User {
-  id      String @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
   account String @unique
 
   createdAt     DateTime        @default(now())
@@ -21,7 +20,7 @@ model User {
 }
 
 model Service {
-  id             String      @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  id             String      @id @default(auto()) @map("_id") @db.ObjectId
   name           String
   topLink        Json
   headLink       Json
@@ -53,7 +52,7 @@ enum serviceAuth {
 }
 
 model ServiceInviteLink {
-  id        String    @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
   serviceId String    @db.ObjectId
   Service   Service   @relation(fields: [serviceId], references: [id])
   createdAt DateTime  @default(now())
@@ -61,7 +60,7 @@ model ServiceInviteLink {
 }
 
 model ServiceMember {
-  id          String   @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   userId      String   @db.ObjectId
   User        User     @relation(fields: [userId], references: [id])
   serviceId   String   @db.ObjectId
@@ -71,11 +70,12 @@ model ServiceMember {
 
   Thread Thread[]
   Reply  Reply[]
+
   @@unique([userId, serviceId])
 }
 
 model Thread {
-  id         String    @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
   userId     String
   title      String?
   name       String
@@ -100,7 +100,7 @@ model Thread {
 }
 
 model Reply {
-  id         String    @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
   userId     String
   name       String?
   content    String?
@@ -124,7 +124,7 @@ model Reply {
 }
 
 model Report {
-  id        String       @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  id        String       @id @default(auto()) @map("_id") @db.ObjectId
   reason    ReportReason
   content   String
   createdAt DateTime     @default(now())
@@ -148,7 +148,7 @@ enum ReportReason {
 }
 
 model Log {
-  id        String   @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   ip        String
   createdAt DateTime @default(now())
   action    Action
@@ -164,12 +164,11 @@ enum Action {
 }
 
 model Domain {
-  id        String   @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String   @unique
   createdAt DateTime @default(now())
   cfDNSID   String
 
   serviceId String  @db.ObjectId
   Service   Service @relation(fields: [serviceId], references: [id])
-
 }
