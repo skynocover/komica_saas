@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client';
-import sha256 from 'crypto-js/sha256';
 const prisma = new PrismaClient();
 
 async function main() {
