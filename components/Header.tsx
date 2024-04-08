@@ -31,14 +31,12 @@ export const Header = ({ title }: { title?: string }) => {
       <div className="p-6 text-center border-b">
         <p className="text-lg font-semibold">{appCtx.auth.currentUser?.displayName}</p>
         <div className="mt-5">
-          <Link href="/Setting">
-            <a
-              target="_blank"
-              className="px-4 py-2 text-xs font-semibold text-gray-700 border rounded-full"
-            >
-              {t('ManageAccount')}
-            </a>
-          </Link>
+          <a
+            target="_blank"
+            className="px-4 py-2 text-xs font-semibold text-gray-700 border rounded-full"
+          >
+            <Link href="/Setting">{t('ManageAccount')}</Link>
+          </a>
         </div>
       </div>
 
@@ -108,11 +106,9 @@ export const Header = ({ title }: { title?: string }) => {
                 </Popover>
               </div>
             ) : (
-              <Link href="/Login">
-                <a className="px-3 py-2 ml-4 text-white bg-indigo-700 rounded-lg hover:bg-indigo-500">
-                  {t('Login')}
-                </a>
-              </Link>
+              <a className="px-3 py-2 ml-4 text-white bg-indigo-700 rounded-lg hover:bg-indigo-500">
+                <Link href="/Login">{t('Login')}</Link>
+              </a>
             )}
             <>
               <div className="relative inline-flex ml-2">
